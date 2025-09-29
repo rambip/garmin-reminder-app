@@ -1,30 +1,34 @@
-https://developer.garmin.com/connect-iq/sdk/
+# Garmin Reminder App
 
-Monkey C:
-```
-using Toybox.Application as App;
-using Toybox.System;
+A simple Garmin Connect IQ widget that displays and manages daily reminders on Garmin devices.
 
-class MyProjectApp extends App.AppBase {
+## Features
 
-    // onStart() is called on application start up
-    function onStart(state) {
-    }
+- View current day's reminders in both the app and glance view
+- Cycle through multiple reminders for the current day
+- See how many reminders are scheduled for tomorrow
+- Easy navigation with select button, swipe up, and swipe down gestures
 
-    // onStop() is called when your application is exiting
-    function onStop(state) {
-    }
+## Supported Devices
 
-    // Return the initial view of your application here
-    function getInitialView() {
-        return [ new MyProjectView() ];
-    }
-}
-```
+- Forerunner 165
 
-Properties:
-- duck typed, throw an error at runtime
-- functions are not first time citizens
-- object oriented programming with compiled classes (static)
-- support for arrays and dictionnaries
-- there is a concept of "symbol": a unique identifier in the entire program. You can use it as a dictionary key, or as an enum value.
+## Development
+
+This app is built using Monkey C for Garmin Connect IQ. To build the project:
+
+1. Install the Garmin Connect IQ SDK
+2. Run `./build.sh` to compile for the target device
+3. Use the Garmin Connect IQ app to install the result.prg file on your device
+
+## Project Structure
+
+- `source/Main.mc` - Application base, glance view, and data initialization
+- `source/ReminderView.mc` - Main UI and interaction handling for the widget
+
+## Future Enhancements
+
+- Add reminder creation functionality
+- Implement persistent storage for reminders
+- Add reminder notifications
+- Support additional Garmin devices
