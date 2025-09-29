@@ -9,27 +9,37 @@ import Toybox.Time.Gregorian;
 // Each date key maps to an array of reminder objects
 var remindersData = {};
 
-// Initialize with default reminders (Sept 30th)
+// Initialize empty reminder data
 function initializeDefaultData() {
-    // Create date (Sept 30th, 2023)
-    var date = Time.Gregorian.moment({
-        :year => 2023,
-        :month => 9,  // September (1-12)
-        :day => 30    // 30th
-    });
+    // No default data - users will add their own reminders
+}
 
-    // Convert to seconds since epoch for dictionary key
-    var dateKey = date.value().toString();
+// Get today's date as a Moment and as a string key
+function getTodayInfo() {
+    // Get the current date (today)
+    var today = Time.today();
+    var todayInfo = {:moment => today, :key => today.value().toString()};
+    return todayInfo;
+}
 
-    // Add default reminders for the date with more details
-    remindersData.put(dateKey, [
-        {:text => "Default reminder for Sept 30th", :priority => "high"},
-        {:text => "Task to complete", :priority => "medium"},
-        {:text => "Third reminder item", :priority => "low"}
-    ]);
+// Add a new reminder
+function addReminder(category, timeScope, firstLetter) {
+    var todayInfo = getTodayInfo();
+    var dateKey = todayInfo[:key];
 
-    // We only handle reminders for a single date in this version
-    // Future versions could support multiple dates and notifications
+    // Create the reminder object
+    var reminder = {:category => category, :timeScope => timeScope, :firstLetter => firstLetter};
+
+    // Check if we already have reminders for today
+    var existingReminders = remindersData.get(dateKey);
+
+    if (existingReminders != null) {
+        // Add to existing array
+        existingReminders.add(reminder);
+    } else {
+        // Create new array with this reminder
+        remindersData.put(dateKey, [reminder]);
+    }
 }
 
 class Main extends Application.AppBase {
@@ -65,15 +75,15 @@ class MinimalView extends WatchUi.GlanceView {
             Graphics.TEXT_JUSTIFY_LEFT
         );
 
-        // Get date for showing reminders
-        var date = Time.Gregorian.moment({:year => 2023, :month => 9, :day => 30});
-        var dateKey = date.value().toString();
+        // Get today's date for showing reminders
+        var todayInfo = getTodayInfo();
+        var dateKey = todayInfo[:key];
         var reminder = remindersData.get(dateKey);
 
         // Count reminders
         var reminderCount = reminder != null ? reminder.size() : 0;
 
-        // Draw the reminder count
+        // Draw the reminder count (simple glance view)
         dc.drawText(
             dc.getWidth() / 2,
             dc.getHeight() / 2,

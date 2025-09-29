@@ -1,6 +1,6 @@
 # Garmin App - Agents
 
-This document describes the agent architecture of the Garmin reminder application, explaining the core components in the system.
+This document describes the agent architecture of the Garmin reminder application, explaining the core components in the system. The application follows a minimal input philosophy, focusing on quick reminder creation with just three key data points.
 
 ## API Documentation
 
@@ -43,9 +43,9 @@ Garmin Connect IQ API Documentation: https://developer.garmin.com/connect-iq/api
 **Role**: Native Garmin menu for displaying and interacting with reminders.
 
 **Responsibilities**:
-- Display reminders in a structured menu with indexed entries and proper alignment
-- Utilize label, subLabel, and identifier properties for rich menu presentation
-- Support icon display for enhanced visual presentation (when available)
+- Display reminders in a structured menu with category, time scope, and letter code
+- Format menu items to show full category name and letter code in label, time scope in sublabel
+- Support quick recognition of reminder categories through visual cues
 - Allow for easy navigation through items
 
 #### 2.4 ReminderMenuDelegate
@@ -65,7 +65,7 @@ Garmin Connect IQ API Documentation: https://developer.garmin.com/connect-iq/api
 
 **Responsibilities**:
 - Provide a condensed view of reminders
-- Show the count of reminders
+- Display simple total reminder count
 
 #### 3.2 NotImplementedView
 
@@ -97,10 +97,10 @@ Garmin Connect IQ API Documentation: https://developer.garmin.com/connect-iq/api
 ### MenuItem Usage
 
 The app uses WatchUi.MenuItem with the following structure:
-- Main label: Contains the reminder text with index "[1] Reminder text"
-- Sub label: Used for supplementary information or categorization
+- Main label: Shows full category name and letter code "work [N]" (Work reminder with code N)
+- Sub label: Shows time scope (morning, afternoon, evening)
 - Identifier: Structured as "reminder_X" where X is the index
-- Options: Controls alignment and presentation (right or left aligned based on content)
+- Options: Controls alignment and presentation (left aligned for better readability)
 
 ## Build System
 
@@ -127,11 +127,14 @@ The app uses WatchUi.MenuItem with the following structure:
 
 **Components**:
 - Date keys (stored as string timestamps)
-- Reminder objects with text property
-- Organized in native Garmin menus for display
+- Reminder objects with three properties:
+  - category: Context grouping (work, friends, family, message, administrative)
+  - timeScope: Priority level (urgent, today, later)
+  - firstLetter: Simple letter code (N, R, S, T, C) without specific meanings
 
 **Usage**:
 - Multiple reminders can be associated with a single date
-- Reminders for different dates are separated
-- Native menu provides structured navigation through reminders
-- Menu items can be selected for potential future actions
+- Reminders are categorized for easier mental mapping
+- Minimal data structure supports quick input and recognition
+- Time scopes help prioritize when tasks should be completed
+- Fixed letter codes (N, R, S, T, C) simplify selection and provide basic identifiers

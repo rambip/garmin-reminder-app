@@ -2,6 +2,7 @@ import Toybox.WatchUi;
 import Toybox.Graphics;
 import Toybox.Time;
 import Toybox.Time.Gregorian;
+import Toybox.Lang;
 
 // The main menu shown when first entering the app
 class MainMenu extends WatchUi.Menu2 {
@@ -40,14 +41,10 @@ class MainMenuDelegate extends WatchUi.Menu2InputDelegate {
         System.println("Selected main menu item: " + itemId);
 
         if (itemId.equals("add_reminder")) {
-            // Placeholder for future implementation
-            // Would show a form to add a new reminder
-            // Show a placeholder message for now
-            WatchUi.pushView(
-                new NotImplementedView(),
-                new PlaceholderDelegate(),
-                WatchUi.SLIDE_UP
-            );
+            // Start the add reminder process with the category selection menu
+            var categoryMenu = new CategoryMenu();
+            var categoryDelegate = new CategoryMenuDelegate();
+            WatchUi.pushView(categoryMenu, categoryDelegate, WatchUi.SLIDE_UP);
         } else if (itemId.equals("see_reminders")) {
             // Show the reminders menu
             var menu = new ReminderMenu();
@@ -62,64 +59,7 @@ class MainMenuDelegate extends WatchUi.Menu2InputDelegate {
     }
 }
 
-// Simple view for not-yet-implemented features
-class NotImplementedView extends WatchUi.View {
-    function initialize() {
-        View.initialize();
-    }
-
-    function onLayout(dc) {
-        // Nothing to do
-    }
-
-    function onUpdate(dc) {
-        // Set background color
-        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_WHITE);
-        dc.clear();
-
-        // Draw header with larger font
-        dc.setColor(Graphics.COLOR_DK_BLUE, Graphics.COLOR_WHITE);
-        dc.drawText(
-            dc.getWidth()/2,
-            dc.getHeight()/4,
-            Graphics.FONT_MEDIUM,
-            "COMING SOON",
-            Graphics.TEXT_JUSTIFY_CENTER
-        );
-
-        // Draw feature message
-        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_WHITE);
-        dc.drawText(
-            dc.getWidth()/2,
-            dc.getHeight()/2,
-            Graphics.FONT_SMALL,
-            "Add Reminder feature",
-            Graphics.TEXT_JUSTIFY_CENTER
-        );
-
-        // Draw hint message
-        dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_WHITE);
-        dc.drawText(
-            dc.getWidth()/2,
-            (dc.getHeight()*3)/4,
-            Graphics.FONT_TINY,
-            "Press Back to return",
-            Graphics.TEXT_JUSTIFY_CENTER
-        );
-    }
-}
-
-// Placeholder delegate for not-yet-implemented features
-class PlaceholderDelegate extends WatchUi.BehaviorDelegate {
-    function initialize() {
-        BehaviorDelegate.initialize();
-    }
-
-    function onBack() {
-        WatchUi.popView(WatchUi.SLIDE_DOWN);
-        return true;
-    }
-}
+// Classes for the add reminder flow are defined in ViewManager.mc
 
 // Menu class for displaying reminders in a native Garmin menu
 class ReminderMenu extends WatchUi.Menu2 {
@@ -130,23 +70,25 @@ class ReminderMenu extends WatchUi.Menu2 {
 
     // Populate the menu with reminder items
     function populateMenu() {
-        // Get reminders for the specified date
-        var date = Time.Gregorian.moment({:year => 2023, :month => 9, :day => 30});
-        var dateKey = date.value().toString();
+        // Get reminders for today using the system function
+        var todayInfo = getTodayInfo();
+        var dateKey = todayInfo[:key];
         var reminders = remindersData.get(dateKey);
 
         // No header - we start directly with the reminders
 
-        // Add today's reminders to the menu
+        // Add reminders to the menu with new structure
         if (reminders != null && reminders.size() > 0) {
             for (var i = 0; i < reminders.size(); i++) {
-                // Enhanced display with index number as sublabel and left alignment
-                // Get priority if available, otherwise use default
-                var priorityText = reminders[i].hasKey(:priority) ? reminders[i][:priority] : "normal";
+                // Get reminder data
+                var category = reminders[i][:category];
+                var timeScope = reminders[i][:timeScope];
+                var firstLetter = reminders[i][:firstLetter];
 
+                // Create display format with full category name and first letter
                 addItem(new WatchUi.MenuItem(
-                    reminders[i][:text],
-                    Lang.format("#$1$ ($2$)", [(i + 1).toString(), priorityText]),
+                    Lang.format("$1$ [$2$]", [category, firstLetter]),
+                    timeScope,
                     "reminder_" + i,
                     {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
                 ));
@@ -191,5 +133,6 @@ class ReminderMenuDelegate extends WatchUi.Menu2InputDelegate {
     function onBack() {
         // Go back to the main menu
         WatchUi.popView(WatchUi.SLIDE_DOWN);
+        // No return value for Menu2InputDelegate onBack
     }
 }
