@@ -2,6 +2,10 @@
 
 This document describes the agent architecture of the Garmin reminder application, explaining the core components in the system.
 
+## API Documentation
+
+Garmin Connect IQ API Documentation: https://developer.garmin.com/connect-iq/api-docs/
+
 ## Core Agents
 
 ### 1. Application Controller (Main)
@@ -39,8 +43,9 @@ This document describes the agent architecture of the Garmin reminder applicatio
 **Role**: Native Garmin menu for displaying and interacting with reminders.
 
 **Responsibilities**:
-- Display today's and tomorrow's reminders in a structured menu
-- Organize reminders with appropriate headers
+- Display reminders in a structured menu with indexed entries and proper alignment
+- Utilize label, subLabel, and identifier properties for rich menu presentation
+- Support icon display for enhanced visual presentation (when available)
 - Allow for easy navigation through items
 
 #### 2.4 ReminderMenuDelegate
@@ -59,8 +64,8 @@ This document describes the agent architecture of the Garmin reminder applicatio
 **Role**: Lightweight view for the Garmin glance feature.
 
 **Responsibilities**:
-- Provide a condensed view of today's reminders
-- Show the count of reminders for the current day
+- Provide a condensed view of reminders
+- Show the count of reminders
 
 #### 3.2 NotImplementedView
 
@@ -86,6 +91,16 @@ This document describes the agent architecture of the Garmin reminder applicatio
 4. The `ReminderMenu` displays all reminders in a structured list
 5. User can navigate and select specific reminders
 6. Menu actions return the user to the previous menu or view
+
+## Menu Display Implementation
+
+### MenuItem Usage
+
+The app uses WatchUi.MenuItem with the following structure:
+- Main label: Contains the reminder text with index "[1] Reminder text"
+- Sub label: Used for supplementary information or categorization
+- Identifier: Structured as "reminder_X" where X is the index
+- Options: Controls alignment and presentation (right or left aligned based on content)
 
 ## Build System
 

@@ -6,7 +6,7 @@ A simple Garmin Connect IQ widget that displays and manages daily reminders on G
 
 - View current day's reminders in both the app and glance view
 - Cycle through multiple reminders for the current day
-- See how many reminders are scheduled for tomorrow
+- See indexed reminders for better organization
 - Easy navigation with select button, swipe up, and swipe down gestures
 
 ## Supported Devices

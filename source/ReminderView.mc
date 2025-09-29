@@ -12,19 +12,19 @@ class MainMenu extends WatchUi.Menu2 {
 
     // Populate the menu with main options
     function populateMenu() {
-        // Add the two main menu options
+        // Add the two main menu options with left alignment for better readability
         addItem(new WatchUi.MenuItem(
             "Add Reminder",
             "Create a new reminder",
             "add_reminder",
-            null
+            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
         ));
 
         addItem(new WatchUi.MenuItem(
             "See Reminders",
             "View your reminders",
             "see_reminders",
-            null
+            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
         ));
     }
 }
@@ -73,14 +73,38 @@ class NotImplementedView extends WatchUi.View {
     }
 
     function onUpdate(dc) {
+        // Set background color
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_WHITE);
         dc.clear();
+
+        // Draw header with larger font
+        dc.setColor(Graphics.COLOR_DK_BLUE, Graphics.COLOR_WHITE);
+        dc.drawText(
+            dc.getWidth()/2,
+            dc.getHeight()/4,
+            Graphics.FONT_MEDIUM,
+            "COMING SOON",
+            Graphics.TEXT_JUSTIFY_CENTER
+        );
+
+        // Draw feature message
+        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_WHITE);
         dc.drawText(
             dc.getWidth()/2,
             dc.getHeight()/2,
+            Graphics.FONT_SMALL,
+            "Add Reminder feature",
+            Graphics.TEXT_JUSTIFY_CENTER
+        );
+
+        // Draw hint message
+        dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_WHITE);
+        dc.drawText(
+            dc.getWidth()/2,
+            (dc.getHeight()*3)/4,
             Graphics.FONT_TINY,
-            "Add Reminder feature\ncoming soon!",
-            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+            "Press Back to return",
+            Graphics.TEXT_JUSTIFY_CENTER
         );
     }
 }
@@ -106,69 +130,37 @@ class ReminderMenu extends WatchUi.Menu2 {
 
     // Populate the menu with reminder items
     function populateMenu() {
-        // Get today's reminders
-        var today = Time.Gregorian.moment({:year => 2023, :month => 9, :day => 30});
-        var todayKey = today.value().toString();
-        var reminders = remindersData.get(todayKey);
+        // Get reminders for the specified date
+        var date = Time.Gregorian.moment({:year => 2023, :month => 9, :day => 30});
+        var dateKey = date.value().toString();
+        var reminders = remindersData.get(dateKey);
 
-        // Add header for today's reminders
-        addItem(new WatchUi.MenuItem(
-            "TODAY'S REMINDERS",
-            null,
-            "todayHeader",
-            null
-        ));
+        // No header - we start directly with the reminders
 
         // Add today's reminders to the menu
         if (reminders != null && reminders.size() > 0) {
             for (var i = 0; i < reminders.size(); i++) {
+                // Enhanced display with index number as sublabel and left alignment
+                // Get priority if available, otherwise use default
+                var priorityText = reminders[i].hasKey(:priority) ? reminders[i][:priority] : "normal";
+
                 addItem(new WatchUi.MenuItem(
                     reminders[i][:text],
-                    Lang.format("Item $1$", [i + 1]),
-                    "reminder_today_" + i,
-                    null
+                    Lang.format("#$1$ ($2$)", [(i + 1).toString(), priorityText]),
+                    "reminder_" + i,
+                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
                 ));
             }
         } else {
             addItem(new WatchUi.MenuItem(
-                "No reminders for today",
-                null,
-                "no_reminders_today",
-                null
+                "No reminders",
+                "Add some!",
+                "no_reminders",
+                {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
             ));
         }
 
-        // Add tomorrow's reminders header
-        addItem(new WatchUi.MenuItem(
-            "TOMORROW'S REMINDERS",
-            null,
-            "tomorrowHeader",
-            null
-        ));
-
-        // Get tomorrow's reminders
-        var tomorrow = Time.Gregorian.moment({:year => 2023, :month => 10, :day => 1});
-        var tomorrowKey = tomorrow.value().toString();
-        var tomorrowReminders = remindersData.get(tomorrowKey);
-
-        // Add tomorrow's reminders to the menu
-        if (tomorrowReminders != null && tomorrowReminders.size() > 0) {
-            for (var i = 0; i < tomorrowReminders.size(); i++) {
-                addItem(new WatchUi.MenuItem(
-                    tomorrowReminders[i][:text],
-                    Lang.format("Item $1$", [i + 1]),
-                    "reminder_tomorrow_" + i,
-                    null
-                ));
-            }
-        } else {
-            addItem(new WatchUi.MenuItem(
-                "No reminders for tomorrow",
-                null,
-                "no_reminders_tomorrow",
-                null
-            ));
-        }
+        // No footer - menu ends with the last reminder
     }
 }
 
@@ -189,7 +181,10 @@ class ReminderMenuDelegate extends WatchUi.Menu2InputDelegate {
             WatchUi.requestUpdate();
         }
 
-        // Return to the previous view
+        // Display a confirmation that the item was selected
+        System.println("Selected: " + item.getLabel());
+
+        // Return to the previous view with animation
         WatchUi.popView(WatchUi.SLIDE_DOWN);
     }
 
