@@ -1,6 +1,6 @@
 # Garmin App - Agents
 
-This document describes the agent architecture of the Garmin application, explaining the core components in the system.
+This document describes the agent architecture of the Garmin reminder application, explaining the core components in the system.
 
 ## Core Agents
 
@@ -14,19 +14,47 @@ This document describes the agent architecture of the Garmin application, explai
 - Create and return initial views
 - Provide glance view for the widget
 
-### 2. View Components
+### 2. Menu Components
 
-#### 2.1 ReminderView
+#### 2.1 MainMenu
 
-**Role**: Primary view that renders the main interface of the application with reminders.
+**Role**: Primary menu shown when the app is first launched.
 
 **Responsibilities**:
-- Render the main reminder interface
-- Display current reminder and pagination information
-- Show counts of upcoming reminders
-- Handle layout and presentation
+- Display main menu options (Add Reminder, See Reminders)
+- Serve as the entry point for the application
+- Navigate to appropriate views based on selection
 
-#### 2.2 MinimalView
+#### 2.2 MainMenuDelegate
+
+**Role**: Event handler for the main menu interactions.
+
+**Responsibilities**:
+- Process menu item selections
+- Launch appropriate sub-menus or views
+- Handle back button behavior
+
+#### 2.3 ReminderMenu
+
+**Role**: Native Garmin menu for displaying and interacting with reminders.
+
+**Responsibilities**:
+- Display today's and tomorrow's reminders in a structured menu
+- Organize reminders with appropriate headers
+- Allow for easy navigation through items
+
+#### 2.4 ReminderMenuDelegate
+
+**Role**: Event handler for reminder menu interactions.
+
+**Responsibilities**:
+- Process reminder item selection
+- Handle menu navigation
+- Return to main menu when needed
+
+### 3. View Components
+
+#### 3.1 MinimalView
 
 **Role**: Lightweight view for the Garmin glance feature.
 
@@ -34,25 +62,30 @@ This document describes the agent architecture of the Garmin application, explai
 - Provide a condensed view of today's reminders
 - Show the count of reminders for the current day
 
-### 3. Interaction Handlers
+#### 3.2 NotImplementedView
 
-#### 3.1 ReminderDelegate
-
-**Role**: Event handler that processes user interactions with reminders.
+**Role**: Placeholder view for features that are not yet implemented.
 
 **Responsibilities**:
-- Process button presses and touch inputs
-- Cycle through available reminders
-- Handle next/previous navigation
-- Manage back button behavior
+- Display a message indicating the feature is coming soon
+- Provide feedback for planned functionality
+
+#### 3.3 PlaceholderDelegate
+
+**Role**: Simple delegate for placeholder views.
+
+**Responsibilities**:
+- Handle back button for not-yet-implemented features
+- Return to previous screen
 
 ## Data Flow
 
 1. The `Main` class initializes the application and creates reminder data
-2. Views display the current reminders based on date
-3. User interactions are captured by `ReminderDelegate` which cycles through reminders
-4. Views are refreshed with updated information
-5. Current reminder index is tracked for cycling through reminders
+2. The app launches directly to the `MainMenu`
+3. User selects "See Reminders" to open the `ReminderMenu`
+4. The `ReminderMenu` displays all reminders in a structured list
+5. User can navigate and select specific reminders
+6. Menu actions return the user to the previous menu or view
 
 ## Build System
 
@@ -80,9 +113,10 @@ This document describes the agent architecture of the Garmin application, explai
 **Components**:
 - Date keys (stored as string timestamps)
 - Reminder objects with text property
-- Global index for tracking currently displayed reminder
+- Organized in native Garmin menus for display
 
 **Usage**:
 - Multiple reminders can be associated with a single date
 - Reminders for different dates are separated
-- Current index allows cycling through available reminders
+- Native menu provides structured navigation through reminders
+- Menu items can be selected for potential future actions

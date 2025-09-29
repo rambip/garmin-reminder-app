@@ -9,9 +9,6 @@ import Toybox.Time.Gregorian;
 // Each date key maps to an array of reminder objects
 var remindersData = {};
 
-// Current index for cycling through reminders
-var currentReminderIndex = 0;
-
 // Initialize with a default reminder for today (Sept 30th)
 function initializeDefaultData() {
     // Create today's date (Sept 30th, 2023)
@@ -51,7 +48,7 @@ class Main extends Application.AppBase {
     }
 
     function getInitialView() {
-        return [new ReminderView(), new ReminderDelegate()];
+        return [new MainMenu(), new MainMenuDelegate()];
     }
 
     function getGlanceView() {
@@ -91,4 +88,4 @@ class MinimalView extends WatchUi.GlanceView {
     }
 }
 
-// The MinimalWidgetView and MyWidgetDelegate classes have been moved to ReminderView.mc
+// The app now uses a menu-based interface with MainMenu as the entry point
