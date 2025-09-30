@@ -55,7 +55,8 @@ class MainMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     function onBack() {
         // Exit the app
-        // Return nothing (void) for Menu2InputDelegate
+        System.exit();
+        return true;
     }
 }
 
