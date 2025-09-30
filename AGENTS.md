@@ -6,6 +6,8 @@ This document describes the agent architecture of the Garmin reminder applicatio
 
 Garmin Connect IQ API Documentation: https://developer.garmin.com/connect-iq/api-docs/
 
+A comprehensive index of Garmin Connect IQ documentation resources is available in the `GARMIN_DOCS.md` file, which contains organized links to all core topics of the Garmin development platform.
+
 ## Core Agents
 
 ### 1. Application Controller (Main)
