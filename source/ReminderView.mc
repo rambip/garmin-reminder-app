@@ -3,6 +3,8 @@ import Toybox.Graphics;
 import Toybox.Time;
 import Toybox.Time.Gregorian;
 import Toybox.Lang;
+import Toybox.Application.Storage;
+import Toybox.System;
 
 // The main menu shown when first entering the app
 class MainMenu extends WatchUi.Menu2 {
@@ -38,7 +40,6 @@ class MainMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     function onSelect(item) {
         var itemId = item.getId();
-        System.println("Selected main menu item: " + itemId);
 
         if (itemId.equals("add_reminder")) {
             // Start the add reminder process with the category selection menu
@@ -71,20 +72,29 @@ class ReminderMenu extends WatchUi.Menu2 {
 
     // Populate the menu with reminder items
     function populateMenu() {
-        // Get reminders for today using the system function
-        var todayInfo = getTodayInfo();
-        var dateKey = todayInfo[:key];
-        var reminders = remindersData.get(dateKey);
+        // Get all reminders
+        var allReminders = getReminders();
+        var todayKey = getTodayKey();
+
+        var todayReminders = [];
+
+        // Filter for today's reminders
+        for (var i = 0; i < allReminders.size(); i++) {
+            var reminderDate = allReminders[i]["date"];
+            if (reminderDate.toString().equals(todayKey)) {
+                todayReminders.add(allReminders[i]);
+            }
+        }
 
         // No header - we start directly with the reminders
 
         // Add reminders to the menu with new structure
-        if (reminders != null && reminders.size() > 0) {
-            for (var i = 0; i < reminders.size(); i++) {
+        if (todayReminders.size() > 0) {
+            for (var i = 0; i < todayReminders.size(); i++) {
                 // Get reminder data
-                var category = reminders[i][:category];
-                var timeScope = reminders[i][:timeScope];
-                var firstLetter = reminders[i][:firstLetter];
+                var category = todayReminders[i]["category"];
+                var timeScope = todayReminders[i]["timeScope"];
+                var firstLetter = todayReminders[i]["firstLetter"];
 
                 // Create display format with full category name and first letter
                 addItem(new WatchUi.MenuItem(
@@ -115,7 +125,6 @@ class ReminderMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     function onSelect(item) {
         var itemId = item.getId();
-        System.println("Selected reminder menu item: " + itemId);
 
         // Process selection based on item ID
         if (itemId instanceof String && itemId.find("reminder_") == 0) {
@@ -123,9 +132,6 @@ class ReminderMenuDelegate extends WatchUi.Menu2InputDelegate {
             // For example, view details, mark as done, etc.
             WatchUi.requestUpdate();
         }
-
-        // Display a confirmation that the item was selected
-        System.println("Selected: " + item.getLabel());
 
         // Return to the previous view with animation
         WatchUi.popView(WatchUi.SLIDE_DOWN);

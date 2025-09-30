@@ -1,45 +1,78 @@
 import Toybox.Application;
+import Toybox.Application.Storage;
 import Toybox.WatchUi;
 import Toybox.Graphics;
 import Toybox.Time;
 import Toybox.Time.Gregorian;
+import Toybox.System;
+import Toybox.Lang;
 // Main module contains the application foundation
 
-// Dictionary to store reminders with dates as keys
-// Each date key maps to an array of reminder objects
-var remindersData = {};
+// Constants
+const STORAGE_KEY_REMINDERS = "reminders";
 
-// Initialize empty reminder data
-function initializeDefaultData() {
-    // No default data - users will add their own reminders
+// Get all reminders
+function getReminders() {
+    var reminders = Storage.getValue(STORAGE_KEY_REMINDERS);
+    if (reminders == null) {
+        return [];
+    }
+    return reminders;
 }
 
-// Get today's date as a Moment and as a string key
-function getTodayInfo() {
-    // Get the current date (today)
+// Save all reminders
+function saveReminders(reminders) {
+    try {
+        Storage.setValue(STORAGE_KEY_REMINDERS, reminders);
+        return true;
+    } catch (ex) {
+        System.println("Error saving reminders: " + ex);
+        return false;
+    }
+}
+
+// Initialize reminder data from storage
+function initializeDefaultData() {
+    // Nothing to initialize - data will be loaded from storage as needed
+}
+
+// Format a date into a simple string (YYYYMMDD)
+function formatDateKey(moment) {
+    var info = Gregorian.info(moment, Time.FORMAT_SHORT);
+    // Format as YYYYMMDD for simple string comparison
+    return Lang.format("$1$$2$$3$", [
+        info.year,
+        (info.month < 10) ? "0" + info.month : info.month.toString(),
+        (info.day < 10) ? "0" + info.day : info.day.toString()
+    ]);
+}
+
+// Get today's date as a string key
+function getTodayKey() {
     var today = Time.today();
-    var todayInfo = {:moment => today, :key => today.value().toString()};
-    return todayInfo;
+    return formatDateKey(today);
 }
 
 // Add a new reminder
 function addReminder(category, timeScope, firstLetter) {
-    var todayInfo = getTodayInfo();
-    var dateKey = todayInfo[:key];
+    var dateKey = getTodayKey();
 
-    // Create the reminder object
-    var reminder = {:category => category, :timeScope => timeScope, :firstLetter => firstLetter};
+    // Create a reminder object
+    var reminder = {
+        "date" => dateKey,
+        "category" => category,
+        "timeScope" => timeScope,
+        "firstLetter" => firstLetter
+    };
 
-    // Check if we already have reminders for today
-    var existingReminders = remindersData.get(dateKey);
+    // Get all existing reminders
+    var reminders = getReminders();
 
-    if (existingReminders != null) {
-        // Add to existing array
-        existingReminders.add(reminder);
-    } else {
-        // Create new array with this reminder
-        remindersData.put(dateKey, [reminder]);
-    }
+    // Add the new reminder
+    reminders.add(reminder);
+
+    // Save the updated list of all reminders
+    return saveReminders(reminders);
 }
 
 class Main extends Application.AppBase {
@@ -75,13 +108,18 @@ class MinimalView extends WatchUi.GlanceView {
             Graphics.TEXT_JUSTIFY_LEFT
         );
 
-        // Get today's date for showing reminders
-        var todayInfo = getTodayInfo();
-        var dateKey = todayInfo[:key];
-        var reminder = remindersData.get(dateKey);
+        // Get all reminders
+        var allReminders = getReminders();
+        var todayKey = getTodayKey();
 
-        // Count reminders
-        var reminderCount = reminder != null ? reminder.size() : 0;
+        // Count today's reminders
+        var reminderCount = 0;
+        for (var i = 0; i < allReminders.size(); i++) {
+            var reminderDate = allReminders[i]["date"];
+            if (reminderDate.toString().equals(todayKey)) {
+                reminderCount++;
+            }
+        }
 
         // Draw the reminder count (simple glance view)
         dc.drawText(

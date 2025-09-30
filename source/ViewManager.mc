@@ -51,7 +51,6 @@ class CategoryMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     function onSelect(item) {
         var category = item.getId();
-        System.println("Selected category: " + category);
 
         var timeMenu = new TimeMenu(category);
         var timeDelegate = new TimeMenuDelegate(category);
@@ -106,7 +105,6 @@ class TimeMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     function onSelect(item) {
         var timeScope = item.getId();
-        System.println("Selected time scope: " + timeScope);
 
         var letterMenu = new LetterMenu(_category, timeScope);
         var letterDelegate = new LetterMenuDelegate(_category, timeScope);
@@ -179,7 +177,6 @@ class LetterMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     function onSelect(item) {
         var letter = item.getId();
-        System.println("Selected letter: " + letter);
 
         addReminder(_category, _timeScope, letter);
 
