@@ -1,5 +1,0 @@
-<layouts>
-    <layout id="ReminderDetailLayout">
-        <!-- This is a placeholder layout. The actual UI drawing is done in onUpdate of the view -->
-    </layout>
-</layouts>

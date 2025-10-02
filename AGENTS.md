@@ -228,3 +228,32 @@ function onHide() {
 - Minimal data structure supports quick input and recognition
 - Time scopes help prioritize when tasks should be completed
 - Fixed letter codes (N, R, S, T, C) simplify selection and provide basic identifiers
+
+## Layout Implementation
+
+### Layout XML Structure
+
+**Format**: Each layout file must follow a strict XML structure with proper nesting
+
+**Components**:
+- Each layout file must include top-level `<resources>` and nested `<layouts>` tags
+- Inside the `<layouts>` tag, individual `<layout>` elements are defined with unique IDs
+- UI elements like `<label>` are placed inside the `<layout>` element
+
+**Example**:
+```
+<resources>
+    <layouts>
+        <layout id="MyLayout">
+            <label id="titleLabel" x="center" y="20%" font="Graphics.FONT_MEDIUM" />
+            <!-- More UI elements -->
+        </layout>
+    </layouts>
+</resources>
+```
+
+**Usage**:
+- Layout files are placed in the `resources/layouts/` directory
+- Layout references are defined in `resources.xml` for compilation
+- Views access layouts via `setLayout(Rez.Layouts.MyLayout(dc))` in their `onLayout` method
+- UI element references must be obtained in `onShow()` using `findDrawableById()`, not in `onUpdate()`

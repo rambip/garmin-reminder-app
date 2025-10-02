@@ -1,3 +1,5 @@
+<resources>
+<layouts>
 <layout id="ReminderDetailLayout">
     <!-- Title in the header -->
     <label id="title" x="center" y="25" color="Graphics.COLOR_BLACK" font="Graphics.FONT_MEDIUM" justification="Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER" text="@Strings.DetailViewTitle" />
@@ -11,3 +13,5 @@
     <!-- Instructions -->
     <label id="instructionsLabel" x="center" y="70%" color="Graphics.COLOR_DK_GRAY" font="Graphics.FONT_XTINY" justification="Graphics.TEXT_JUSTIFY_CENTER" text="START: Delete • BACK: Return" />
 </layout>
+</layouts>
+</resources>

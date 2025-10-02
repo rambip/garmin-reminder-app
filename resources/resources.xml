@@ -1,9 +1,4 @@
 <resources>
-    <layouts>
-        <layout id="ReminderAddedLayout">layouts/reminder_added_layout.xml</layout>
-        <layout id="ReminderDetailLayout">layouts/reminder_detail_layout.xml</layout>
-        <layout id="MinimalLayout">layouts/minimal_layout.xml</layout>
-    </layouts>
     <strings>
         <string id="AppName">Hello app</string>
         <string id="DetailViewTitle">Reminder Details</string>
