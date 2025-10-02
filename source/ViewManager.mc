@@ -1,60 +1,61 @@
 import Toybox.WatchUi;
 
-class CategoryMenu extends WatchUi.Menu2 {
-    function initialize() {
-        Menu2.initialize({:title => "Select Category"});
-        populateMenu();
-    }
+class CategoryMenuDelegate extends WatchUi.Menu2InputDelegate {
+    hidden var _menu;
 
-    function populateMenu() {
-        addItem(new WatchUi.MenuItem(
+    function initialize() {
+        Menu2InputDelegate.initialize();
+
+        // Create the menu
+        _menu = new WatchUi.Menu2({:title => "Select Category"});
+
+        // Populate the menu
+        _menu.addItem(new WatchUi.MenuItem(
             "Work",
             null,
             "work",
             {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
         ));
 
-        addItem(new WatchUi.MenuItem(
+        _menu.addItem(new WatchUi.MenuItem(
             "Friends",
             null,
             "friends",
             {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
         ));
 
-        addItem(new WatchUi.MenuItem(
+        _menu.addItem(new WatchUi.MenuItem(
             "Family",
             null,
             "family",
             {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
         ));
 
-        addItem(new WatchUi.MenuItem(
+        _menu.addItem(new WatchUi.MenuItem(
             "Message",
             null,
             "message",
             {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
         ));
 
-        addItem(new WatchUi.MenuItem(
+        _menu.addItem(new WatchUi.MenuItem(
             "Administrative",
             null,
             "administrative",
             {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
         ));
     }
-}
 
-class CategoryMenuDelegate extends WatchUi.Menu2InputDelegate {
-    function initialize() {
-        Menu2InputDelegate.initialize();
+    // Get the menu instance
+    function getMenu() {
+        return _menu;
     }
 
     function onSelect(item) {
         var category = item.getId();
 
-        var timeMenu = new TimeMenu(category);
         var timeDelegate = new TimeMenuDelegate(category);
-        WatchUi.pushView(timeMenu, timeDelegate, WatchUi.SLIDE_LEFT);
+        WatchUi.pushView(timeDelegate.getMenu(), timeDelegate, WatchUi.SLIDE_LEFT);
     }
 
     function onBack() {
@@ -62,53 +63,50 @@ class CategoryMenuDelegate extends WatchUi.Menu2InputDelegate {
     }
 }
 
-class TimeMenu extends WatchUi.Menu2 {
+class TimeMenuDelegate extends WatchUi.Menu2InputDelegate {
     hidden var _category;
+    hidden var _menu;
 
     function initialize(category) {
-        Menu2.initialize({:title => "Select Time"});
+        Menu2InputDelegate.initialize();
         _category = category;
-        populateMenu();
-    }
 
-    function populateMenu() {
-        addItem(new WatchUi.MenuItem(
+        // Create the menu
+        _menu = new WatchUi.Menu2({:title => "Select Time"});
+
+        // Populate the menu
+        _menu.addItem(new WatchUi.MenuItem(
             "Urgent",
             null,
             "urgent",
             {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
         ));
 
-        addItem(new WatchUi.MenuItem(
+        _menu.addItem(new WatchUi.MenuItem(
             "Today",
             null,
             "today",
             {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
         ));
 
-        addItem(new WatchUi.MenuItem(
+        _menu.addItem(new WatchUi.MenuItem(
             "Later",
             null,
             "later",
             {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
         ));
     }
-}
 
-class TimeMenuDelegate extends WatchUi.Menu2InputDelegate {
-    hidden var _category;
-
-    function initialize(category) {
-        Menu2InputDelegate.initialize();
-        _category = category;
+    // Get the menu instance
+    function getMenu() {
+        return _menu;
     }
 
     function onSelect(item) {
         var timeScope = item.getId();
 
-        var letterMenu = new LetterMenu(_category, timeScope);
         var letterDelegate = new LetterMenuDelegate(_category, timeScope);
-        WatchUi.pushView(letterMenu, letterDelegate, WatchUi.SLIDE_LEFT);
+        WatchUi.pushView(letterDelegate.getMenu(), letterDelegate, WatchUi.SLIDE_LEFT);
     }
 
     function onBack() {
@@ -116,63 +114,59 @@ class TimeMenuDelegate extends WatchUi.Menu2InputDelegate {
     }
 }
 
-class LetterMenu extends WatchUi.Menu2 {
-    hidden var _category;
-    hidden var _timeScope;
-
-    function initialize(category, timeScope) {
-        Menu2.initialize({:title => "Select Letter"});
-        _category = category;
-        _timeScope = timeScope;
-        populateMenu();
-    }
-
-    function populateMenu() {
-        addItem(new WatchUi.MenuItem(
-            "N",
-            null,
-            "N",
-            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-        ));
-
-        addItem(new WatchUi.MenuItem(
-            "R",
-            null,
-            "R",
-            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-        ));
-
-        addItem(new WatchUi.MenuItem(
-            "S",
-            null,
-            "S",
-            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-        ));
-
-        addItem(new WatchUi.MenuItem(
-            "T",
-            null,
-            "T",
-            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-        ));
-
-        addItem(new WatchUi.MenuItem(
-            "C",
-            null,
-            "C",
-            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-        ));
-    }
-}
-
 class LetterMenuDelegate extends WatchUi.Menu2InputDelegate {
     hidden var _category;
     hidden var _timeScope;
+    hidden var _menu;
 
     function initialize(category, timeScope) {
         Menu2InputDelegate.initialize();
         _category = category;
         _timeScope = timeScope;
+
+        // Create the menu
+        _menu = new WatchUi.Menu2({:title => "Select Letter"});
+
+        // Populate the menu
+        _menu.addItem(new WatchUi.MenuItem(
+            "N",
+            null,
+            "N",
+            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
+        ));
+
+        _menu.addItem(new WatchUi.MenuItem(
+            "R",
+            null,
+            "R",
+            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
+        ));
+
+        _menu.addItem(new WatchUi.MenuItem(
+            "S",
+            null,
+            "S",
+            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
+        ));
+
+        _menu.addItem(new WatchUi.MenuItem(
+            "T",
+            null,
+            "T",
+            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
+        ));
+
+        _menu.addItem(new WatchUi.MenuItem(
+            "C",
+            null,
+            "C",
+            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
+        ));
+    }
+
+    // Get the menu instance
+    function getMenu() {
+        return _menu;
     }
 
     function onSelect(item) {

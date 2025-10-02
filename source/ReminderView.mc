@@ -6,36 +6,37 @@ import Toybox.Lang;
 import Toybox.Application.Storage;
 import Toybox.System;
 
-// The main menu shown when first entering the app
-class MainMenu extends WatchUi.Menu2 {
-    function initialize() {
-        Menu2.initialize({:title => "Reminder App"});
-        populateMenu();
-    }
+// Menu delegate that creates and manages the main menu
 
-    // Populate the menu with main options
-    function populateMenu() {
-        // Add the two main menu options with left alignment for better readability
-        addItem(new WatchUi.MenuItem(
+// Delegate for handling the main menu interactions
+class MainMenuDelegate extends WatchUi.Menu2InputDelegate {
+    hidden var _menu;
+
+    function initialize() {
+        Menu2InputDelegate.initialize();
+
+        // Create the main menu
+        _menu = new WatchUi.Menu2({:title => "Reminder App"});
+
+        // Populate the menu with main options
+        _menu.addItem(new WatchUi.MenuItem(
             "Add Reminder",
             "Create a new reminder",
             "add_reminder",
             {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
         ));
 
-        addItem(new WatchUi.MenuItem(
+        _menu.addItem(new WatchUi.MenuItem(
             "See Reminders",
             "View your reminders",
             "see_reminders",
             {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
         ));
     }
-}
 
-// Delegate for handling the main menu interactions
-class MainMenuDelegate extends WatchUi.Menu2InputDelegate {
-    function initialize() {
-        Menu2InputDelegate.initialize();
+    // Get the menu instance
+    function getMenu() {
+        return _menu;
     }
 
     function onSelect(item) {
@@ -43,14 +44,12 @@ class MainMenuDelegate extends WatchUi.Menu2InputDelegate {
 
         if (itemId.equals("add_reminder")) {
             // Start the add reminder process with the category selection menu
-            var categoryMenu = new CategoryMenu();
             var categoryDelegate = new CategoryMenuDelegate();
-            WatchUi.pushView(categoryMenu, categoryDelegate, WatchUi.SLIDE_UP);
+            WatchUi.pushView(categoryDelegate.getMenu(), categoryDelegate, WatchUi.SLIDE_UP);
         } else if (itemId.equals("see_reminders")) {
             // Show the reminders menu
-            var menu = new ReminderMenu();
             var menuDelegate = new ReminderMenuDelegate();
-            WatchUi.pushView(menu, menuDelegate, WatchUi.SLIDE_UP);
+            WatchUi.pushView(menuDelegate.getMenu(), menuDelegate, WatchUi.SLIDE_UP);
         }
     }
 
@@ -63,15 +62,24 @@ class MainMenuDelegate extends WatchUi.Menu2InputDelegate {
 
 // Classes for the add reminder flow are defined in ViewManager.mc
 
-// Menu class for displaying reminders in a native Garmin menu
-class ReminderMenu extends WatchUi.Menu2 {
+// Menu delegate to handle reminders menu interactions
+class ReminderMenuDelegate extends WatchUi.Menu2InputDelegate {
+    hidden var _menu;
+
     function initialize() {
-        Menu2.initialize({:title => "Reminders"});
-        populateMenu();
+        Menu2InputDelegate.initialize();
+
+        // Create the menu
+        _menu = new WatchUi.Menu2({:title => "Reminders"});
+
+        // We'll populate it in getMenu() before it's shown
     }
 
-    // Populate the menu with reminder items
-    function populateMenu() {
+    // Get and populate the menu before it's shown
+    function getMenu() {
+        // Create a new menu instance instead of clearing the existing one
+        _menu = new WatchUi.Menu2({:title => "Reminders"});
+
         // Get all reminders
         var allReminders = getReminders();
         var todayKey = getTodayKey();
@@ -97,7 +105,7 @@ class ReminderMenu extends WatchUi.Menu2 {
                 var firstLetter = todayReminders[i]["firstLetter"];
 
                 // Create display format with full category name and first letter
-                addItem(new WatchUi.MenuItem(
+                _menu.addItem(new WatchUi.MenuItem(
                     Lang.format("$1$ [$2$]", [category, firstLetter]),
                     timeScope,
                     "reminder_" + i,
@@ -105,7 +113,7 @@ class ReminderMenu extends WatchUi.Menu2 {
                 ));
             }
         } else {
-            addItem(new WatchUi.MenuItem(
+            _menu.addItem(new WatchUi.MenuItem(
                 "No reminders",
                 "Add some!",
                 "no_reminders",
@@ -113,14 +121,7 @@ class ReminderMenu extends WatchUi.Menu2 {
             ));
         }
 
-        // No footer - menu ends with the last reminder
-    }
-}
-
-// Menu delegate to handle reminders menu interactions
-class ReminderMenuDelegate extends WatchUi.Menu2InputDelegate {
-    function initialize() {
-        Menu2InputDelegate.initialize();
+        return _menu;
     }
 
     function onSelect(item) {

@@ -82,7 +82,8 @@ class Main extends Application.AppBase {
     }
 
     function getInitialView() {
-        return [new MainMenu(), new MainMenuDelegate()];
+        var menuDelegate = new MainMenuDelegate();
+        return [menuDelegate.getMenu(), menuDelegate];
     }
 
     function getGlanceView() {
