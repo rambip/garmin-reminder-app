@@ -1,4 +1,6 @@
 import Toybox.WatchUi;
+import Toybox.Graphics;
+import Rez;
 
 class CategoryMenuDelegate extends WatchUi.Menu2InputDelegate {
     hidden var _menu;
@@ -237,6 +239,8 @@ class ReminderAddedView extends WatchUi.View {
     hidden var _category;
     hidden var _timeScope;
     hidden var _letter;
+    hidden var _categoryLabel;
+    hidden var _timeScopeLabel;
 
     function initialize(category, timeScope, letter) {
         View.initialize();
@@ -246,47 +250,20 @@ class ReminderAddedView extends WatchUi.View {
     }
 
     function onLayout(dc) {
-        // Nothing to do
+        setLayout(Rez.Layouts.ReminderAddedLayout(dc));
+
+        // Get references to the labels we need to update
+        _categoryLabel = findDrawableById("category") as WatchUi.Text;
+        _timeScopeLabel = findDrawableById("timeScope") as WatchUi.Text;
+
+        // Set the dynamic text content
+        _categoryLabel.setText(_category + " [" + _letter + "]");
+        _timeScopeLabel.setText(_timeScope);
     }
 
     function onUpdate(dc) {
-        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_WHITE);
-        dc.clear();
-
-        dc.setColor(Graphics.COLOR_DK_GREEN, Graphics.COLOR_WHITE);
-        dc.drawText(
-            dc.getWidth()/2,
-            dc.getHeight()/4,
-            Graphics.FONT_MEDIUM,
-            "Reminder Added",
-            Graphics.TEXT_JUSTIFY_CENTER
-        );
-
-        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_WHITE);
-        dc.drawText(
-            dc.getWidth()/2,
-            dc.getHeight()/2 - 15,
-            Graphics.FONT_SMALL,
-            _category + " [" + _letter + "]",
-            Graphics.TEXT_JUSTIFY_CENTER
-        );
-
-        dc.drawText(
-            dc.getWidth()/2,
-            dc.getHeight()/2 + 15,
-            Graphics.FONT_SMALL,
-            _timeScope,
-            Graphics.TEXT_JUSTIFY_CENTER
-        );
-
-        dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_WHITE);
-        dc.drawText(
-            dc.getWidth()/2,
-            (dc.getHeight()*3)/4,
-            Graphics.FONT_TINY,
-            "Press Back to return",
-            Graphics.TEXT_JUSTIFY_CENTER
-        );
+        // Let the layout handle the rendering
+        View.onUpdate(dc);
     }
 }
 

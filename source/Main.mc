@@ -6,6 +6,7 @@ import Toybox.Time;
 import Toybox.Time.Gregorian;
 import Toybox.System;
 import Toybox.Lang;
+import Rez;
 // Main module contains the application foundation
 
 // Constants
@@ -92,23 +93,20 @@ class Main extends Application.AppBase {
 }
 
 class MinimalView extends WatchUi.GlanceView {
+    hidden var _countLabel;
+
     function initialize() {
         GlanceView.initialize();
     }
+
+    function onLayout(dc) {
+        setLayout(Rez.Layouts.MinimalLayout(dc));
+
+        // Get a reference to the count label
+        _countLabel = findDrawableById("reminderCount") as WatchUi.Text;
+    }
+
     function onUpdate(dc) {
-        // Set color scheme and clear
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.clear();
-
-        // Draw app title
-        dc.drawText(
-            0,
-            0,
-            Graphics.FONT_MEDIUM,
-            "Reminders",
-            Graphics.TEXT_JUSTIFY_LEFT
-        );
-
         // Get all reminders
         var allReminders = getReminders();
         var todayKey = getTodayKey();
@@ -122,14 +120,11 @@ class MinimalView extends WatchUi.GlanceView {
             }
         }
 
-        // Draw the reminder count (simple glance view)
-        dc.drawText(
-            dc.getWidth() / 2,
-            dc.getHeight() / 2,
-            Graphics.FONT_TINY,
-            Lang.format("Reminders: $1$", [reminderCount]),
-            Graphics.TEXT_JUSTIFY_CENTER
-        );
+        // Update the reminder count text
+        _countLabel.setText(Lang.format("Reminders: $1$", [reminderCount]));
+
+        // Let the layout handle the rendering
+        View.onUpdate(dc);
     }
 }
 

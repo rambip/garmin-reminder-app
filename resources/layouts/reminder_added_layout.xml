@@ -1,0 +1,9 @@
+<layout id="ReminderAddedLayout">
+    <label id="title" x="center" y="20%" color="Graphics.COLOR_DK_GREEN" font="Graphics.FONT_MEDIUM" justification="Graphics.TEXT_JUSTIFY_CENTER" text="@Strings.ReminderAddedTitle" />
+
+    <label id="category" x="center" y="45%" color="Graphics.COLOR_BLACK" font="Graphics.FONT_SMALL" justification="Graphics.TEXT_JUSTIFY_CENTER" />
+
+    <label id="timeScope" x="center" y="55%" color="Graphics.COLOR_BLACK" font="Graphics.FONT_SMALL" justification="Graphics.TEXT_JUSTIFY_CENTER" />
+
+    <label id="instructions" x="center" y="75%" color="Graphics.COLOR_DK_GRAY" font="Graphics.FONT_TINY" justification="Graphics.TEXT_JUSTIFY_CENTER" text="@Strings.PressBackToReturn" />
+</layout>
