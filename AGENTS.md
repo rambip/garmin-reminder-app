@@ -121,6 +121,94 @@ The app uses WatchUi.MenuItem with the following structure:
 - Ensures changes are properly compiled and ready for testing
 - Creates result.prg file that can be installed on the device
 
+**Running the Application**:
+- To run the compiled app on a simulator, use the command: `monkeydo result.prg fr165`
+- This launches the application on the fr165 device simulator
+- Essential for testing functionality before deploying to physical devices
+
+## Design Principles
+
+### Component Architecture
+
+**Pattern**: Use composition over inheritance for UI components.
+
+**Implementation**:
+- Do NOT subclass framework components like `WatchUi.Menu2`
+- Instead, create delegate classes that extend appropriate delegate base classes
+- Store framework components as member variables
+- Provide accessor methods to retrieve the components when needed
+
+**Example**:
+```
+// Correct approach - using composition
+class MyMenuDelegate extends WatchUi.Menu2InputDelegate {
+    hidden var _menu;  // Store as member variable
+    
+    function initialize() {
+        Menu2InputDelegate.initialize();
+        _menu = new WatchUi.Menu2({:title => "My Menu"});
+        // Add items, configure menu
+    }
+    
+    function getMenu() {
+        return _menu;  // Accessor method
+    }
+}
+
+// Usage
+var menuDelegate = new MyMenuDelegate();
+WatchUi.pushView(menuDelegate.getMenu(), menuDelegate, WatchUi.SLIDE_UP);
+```
+
+## View Lifecycle Management
+
+### Layout and Label Handling
+
+**Process**: Views must properly manage the lifecycle of UI elements and resources.
+
+**Implementation**:
+1. **onLayout**: Set the layout for the view using `setLayout()`
+   - Only define the layout structure
+   - Do NOT directly access or manipulate UI elements
+
+2. **onShow**: Load resources and initialize UI elements
+   - Load string resources with `WatchUi.loadResource()`
+   - Get references to drawable elements with `View.findDrawableById()`
+   - Set initial values for labels and other UI elements
+   - This separation ensures resources are properly loaded before being used
+
+3. **onUpdate**: Render the view
+   - Update dynamic content if needed
+   - Call the parent `View.onUpdate(dc)` to handle rendering
+
+4. **onHide**: Clean up resources
+   - Set resource variables to null to free memory
+   - Essential for memory management on constrained devices
+
+**Example**:
+```
+function onLayout(dc) {
+    setLayout(Rez.Layouts.MyLayout(dc));
+}
+
+function onShow() {
+    // Load resources
+    _titleText = WatchUi.loadResource(Rez.Strings.MyTitle);
+    
+    // Get UI elements
+    _label = View.findDrawableById("myLabel");
+    
+    // Set values
+    _label.setText(_titleText);
+}
+
+function onHide() {
+    // Free memory
+    _titleText = null;
+    _label = null;
+}
+```
+
 ## Data Structure
 
 ### Reminders Storage

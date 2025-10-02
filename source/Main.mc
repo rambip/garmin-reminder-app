@@ -101,9 +101,11 @@ class MinimalView extends WatchUi.GlanceView {
 
     function onLayout(dc) {
         setLayout(Rez.Layouts.MinimalLayout(dc));
+    }
 
+    function onShow() {
         // Get a reference to the count label
-        _countLabel = findDrawableById("reminderCount") as WatchUi.Text;
+        _countLabel = View.findDrawableById("reminderCount") as WatchUi.Text;
     }
 
     function onUpdate(dc) {
@@ -120,11 +122,17 @@ class MinimalView extends WatchUi.GlanceView {
             }
         }
 
-        // Update the reminder count text
-        _countLabel.setText(Lang.format("Reminders: $1$", [reminderCount]));
+        // Update the reminder count text if label exists
+        if (_countLabel != null) {
+            _countLabel.setText(Lang.format("Reminders: $1$", [reminderCount]));
+        }
 
         // Let the layout handle the rendering
         View.onUpdate(dc);
+    }
+
+    function onHide() {
+        _countLabel = null;
     }
 }
 

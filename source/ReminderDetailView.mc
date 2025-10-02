@@ -3,6 +3,7 @@ import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.Application.Storage;
 import Toybox.System;
+import Toybox.Timer;
 import Rez;
 
 // View to display the details of a selected reminder
@@ -11,6 +12,10 @@ class ReminderDetailView extends WatchUi.View {
     hidden var _reminder;
     hidden var _categoryLabel;
     hidden var _timeScopeLabel;
+    hidden var _title;
+    hidden var _instructionsLabel;
+    // DEBUG counter to track lifecycle
+    hidden var _updateCounter = 0;
 
     function initialize(reminderIndex) {
         View.initialize();
@@ -35,21 +40,44 @@ class ReminderDetailView extends WatchUi.View {
 
     function onLayout(dc) {
         System.println("DEBUG: ReminderDetailView onLayout called");
+        System.println("DEBUG-LIFECYCLE: onLayout for reminder index: " + _reminderIndex);
         setLayout(Rez.Layouts.ReminderDetailLayout(dc));
+    }
 
-        // Get references to the labels we need to update
-        _categoryLabel = findDrawableById("categoryLabel") as WatchUi.Text;
-        _timeScopeLabel = findDrawableById("timeScopeLabel") as WatchUi.Text;
+    // Load strings into memory
+    function onShow() {
+        System.println("DEBUG: ReminderDetailView onShow called");
 
-        // Set the dynamic text content
-        _categoryLabel.setText(Lang.format("$1$ [$2$]", [_reminder["category"], _reminder["firstLetter"]]));
-        _timeScopeLabel.setText(_reminder["timeScope"]);
+        // Get string resources if needed
+        _title = WatchUi.loadResource(Rez.Strings.DetailViewTitle);
+        _instructionsLabel = "START: Delete • BACK: Return";
     }
 
     function onUpdate(dc) {
+        // Get references to the labels we need to update
+        _categoryLabel = View.findDrawableById("categoryLabel") as WatchUi.Text;
+        _timeScopeLabel = View.findDrawableById("timeScopeLabel") as WatchUi.Text;
+
+        // Set the dynamic text content if we have valid labels
+        if (_categoryLabel != null && _reminder != null) {
+            _categoryLabel.setText(Lang.format("$1$ [$2$]", [_reminder["category"], _reminder["firstLetter"]]));
+        }
+
+        if (_timeScopeLabel != null && _reminder != null) {
+            _timeScopeLabel.setText(_reminder["timeScope"]);
+        }
         System.println("DEBUG: ReminderDetailView onUpdate called");
         // Let the layout handle the rendering
         View.onUpdate(dc);
+    }
+
+    // Unload strings to save memory
+    function onHide() {
+        System.println("DEBUG: ReminderDetailView onHide called");
+        _title = null;
+        _instructionsLabel = null;
+        _categoryLabel = null;
+        _timeScopeLabel = null;
     }
 }
 
@@ -65,28 +93,36 @@ class ReminderDetailDelegate extends WatchUi.BehaviorDelegate {
 
     function onBack() {
         System.println("DEBUG: ReminderDetailDelegate.onBack called");
+        System.println("DEBUG-NAV: Back button pressed, popping detail view");
         WatchUi.popView(WatchUi.SLIDE_RIGHT);
+        System.println("DEBUG-NAV: After popView from back button");
         return true;
     }
 
     // Handle menu button presses (specific for some devices)
     function onMenu() {
         System.println("DEBUG: onMenu called - trying to delete");
+        System.println("DEBUG-EVENT: Menu button pressed, calling deleteReminder");
         deleteReminder(_reminderIndex);
+        System.println("DEBUG-EVENT: Returned from deleteReminder after menu button");
         return true;
     }
 
     // Handle select button (center/enter button on many devices)
     function onSelect() {
         System.println("DEBUG: onSelect called - trying to delete");
+        System.println("DEBUG-EVENT: Select button pressed, calling deleteReminder");
         deleteReminder(_reminderIndex);
+        System.println("DEBUG-EVENT: Returned from deleteReminder after select button");
         return true;
     }
 
     // Handle native START button presses
     function onStart() {
         System.println("DEBUG: onStart called - trying to delete");
+        System.println("DEBUG-EVENT: Start button pressed, calling deleteReminder");
         deleteReminder(_reminderIndex);
+        System.println("DEBUG-EVENT: Returned from deleteReminder after start button");
         return true;
     }
 
@@ -115,18 +151,17 @@ class ReminderDetailDelegate extends WatchUi.BehaviorDelegate {
 
 // Helper function to delete a reminder
 function deleteReminder(reminderIndex) {
-    try {
-        System.println("=== BEGIN DELETION PROCESS ===");
-        System.println("DEBUG: Attempting to delete reminder at index: " + reminderIndex);
+    System.println("=== BEGIN DELETION PROCESS ===");
+    System.println("DEBUG: Attempting to delete reminder at index: " + reminderIndex);
 
-        // Get all reminders
-        var allReminders = getReminders();
-        var todayKey = getTodayKey();
-        var todayRemindersIndices = [];
+    // Get all reminders
+    var allReminders = getReminders();
+    var todayKey = getTodayKey();
+    var todayRemindersIndices = [];
 
-        // Find today's reminders and their indices in the main array
-        System.println("DEBUG: Total reminders: " + allReminders.size());
-        System.println("DEBUG: Looking for today's key: " + todayKey);
+    // Find today's reminders and their indices in the main array
+    System.println("DEBUG: Total reminders: " + allReminders.size());
+    System.println("DEBUG: Looking for today's key: " + todayKey);
 
     for (var i = 0; i < allReminders.size(); i++) {
         System.println("DEBUG: Checking reminder " + i + " with date " + allReminders[i]["date"]);
@@ -160,16 +195,13 @@ function deleteReminder(reminderIndex) {
         System.println("ERROR: Invalid reminder index - out of range");
     }
 
-    // Clear the view stack and return to main menu
-    System.println("DEBUG: Clearing navigation stack");
-
-    // Instead of manipulating the view stack directly, use switchToView
-    // This will replace the current view with a new one
-    System.println("DEBUG: Switching directly to a new reminder menu");
-    var menuDelegate = new ReminderMenuDelegate();
-    WatchUi.switchToView(menuDelegate.getMenu(), menuDelegate, WatchUi.SLIDE_RIGHT);
+    // NAVIGATION DEBUG - Before popping views
+    System.println("DEBUG-NAV: Current view stack before pop operations");
+    System.println("DEBUG-NAV: About to pop detail view");
+    WatchUi.popView(WatchUi.SLIDE_RIGHT); // Pop detail view
+    System.println("DEBUG-NAV: Detail view popped successfully");
+    System.println("DEBUG-NAV: About to pop reminder menu view");
+    WatchUi.popView(WatchUi.SLIDE_RIGHT); // Pop reminder menu view
+    System.println("DEBUG-NAV: Both views popped, should be at main menu now");
     System.println("=== END DELETION PROCESS ===");
-    } catch (ex) {
-        System.println("ERROR IN DELETE PROCESS: " + ex.getErrorMessage());
-    }
 }

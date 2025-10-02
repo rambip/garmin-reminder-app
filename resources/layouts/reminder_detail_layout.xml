@@ -1,7 +1,4 @@
 <layout id="ReminderDetailLayout">
-    <!-- Header background -->
-    <drawable id="headerBackground" class="Background" />
-
     <!-- Title in the header -->
     <label id="title" x="center" y="25" color="Graphics.COLOR_BLACK" font="Graphics.FONT_MEDIUM" justification="Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER" text="@Strings.DetailViewTitle" />
 
