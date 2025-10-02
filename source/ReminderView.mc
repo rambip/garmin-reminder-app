@@ -125,12 +125,22 @@ class ReminderMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     function onSelect(item) {
         var itemId = item.getId();
+        System.println("DEBUG: ReminderMenuDelegate.onSelect called with item: " + itemId);
 
         // Process selection based on item ID
         if (itemId instanceof String && itemId.find("reminder_") == 0) {
-            // This is a reminder item - could implement actions here
-            // For example, view details, mark as done, etc.
-            WatchUi.requestUpdate();
+            // Extract the index from the ID (e.g., "reminder_2" -> 2)
+            var indexStr = itemId.substring(9, itemId.length());
+            var index = indexStr.toNumber();
+            System.println("DEBUG: Selected reminder index: " + index);
+
+            // Open the detail view for this reminder
+            System.println("DEBUG: Creating ReminderDetailView for index: " + index);
+            var detailView = new ReminderDetailView(index);
+            var detailDelegate = new ReminderDetailDelegate(index);
+            WatchUi.pushView(detailView, detailDelegate, WatchUi.SLIDE_LEFT);
+            System.println("DEBUG: Pushed ReminderDetailView");
+            return;
         }
 
         // Return to the previous view with animation
@@ -138,6 +148,7 @@ class ReminderMenuDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     function onBack() {
+        System.println("DEBUG: ReminderMenuDelegate.onBack called");
         // Go back to the main menu
         WatchUi.popView(WatchUi.SLIDE_DOWN);
         // No return value for Menu2InputDelegate onBack

@@ -1,3 +1,4 @@
 <strings>
     <string id="AppName">Hello app</string>
+    <string id="DetailViewTitle">Reminder Details</string>
 </strings>
