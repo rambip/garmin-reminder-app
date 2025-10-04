@@ -11,25 +11,6 @@ MonkeyC has non-standard behavior in many areas. Don't assume it matches other l
 - Read documentation before implementing non-trivial features
 - test any argument invariants at the start of the function, and crash the app if it does not hold.
 
-```
-// Unexpected behavior examples:
-function surprisingResults() {
-    // Array access beyond bounds returns null, not error
-    var arr = [1, 2, 3];
-    var value = arr[10];  // Returns null, not exception
-
-    // Equality checks are case-insensitive for strings
-    var result = ("Hello" == "hello");  // Returns true!
-
-    // Array.indexOf() returns -1, not null for missing items
-    var idx = arr.indexOf(5);  // Returns -1
-
-    // Method calls on null don't always throw errors
-    var str = null;
-    var length = str.length();  // Silently returns 0
-}
-```
-
 ## Architecture
 
 Read [ARCHITECTURE.md](ARCHITECTURE.md) first for overall application structure.
