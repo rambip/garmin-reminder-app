@@ -247,6 +247,89 @@ if (categoryStrings.hasKey(categorySymbol)) {
 }
 ```
 
+## Storage and Data Persistence
+
+### Supported Storage Data Types
+
+**Storage Limitations**: The `Application.Storage` module supports a specific set of data types:
+
+- **Basic Types**:
+  - `Lang.Number` - Integer values
+  - `Lang.Float` - Floating point values
+  - `Lang.Long` - 64-bit integer values
+  - `Lang.Double` - Double-precision floating point values
+  - `Lang.Char` - Single character values
+  - `Lang.String` - Text strings
+  - `Lang.Boolean` - True/false values
+
+- **Collection Types**:
+  - `Lang.Array` - Ordered collections (must contain only supported types)
+  - `Lang.Dictionary` - Key-value pairs (must contain only supported types)
+
+**Storage API Usage**:
+- Use `Storage.setValue(key, value)` to save data
+- Use `Storage.getValue(key)` to retrieve data
+- Data is saved to disk immediately when `setValue()` is called
+- Always verify retrieved values with null checks and type checking
+
+**Important Restrictions**:
+- `Lang.Symbol` cannot be stored directly in Storage
+- When storing symbols, convert them to strings first
+- When storing objects in collections, all nested objects must also be of supported types
+- Storage keys and values are limited to 8 KB each
+- A total of 128 KB of storage is available to the app
+- Storage operations may silently convert some types (like Numbers to Strings)
+- Type inconsistencies between save and retrieve are a common source of bugs
+
+**Example - Symbol to String Mapping**:
+```
+// Simple one-to-one mapping for symbols to strings
+var symbolToString = {
+    :work => "work",
+    :family => "family",
+    :friends => "friends"
+};
+
+// Store a symbol by converting to its string equivalent
+function storeCategory(categorySymbol) {
+    if (symbolToString.hasKey(categorySymbol)) {
+        Storage.setValue("lastCategory", symbolToString[categorySymbol]);
+    }
+}
+
+// Retrieve a string and convert back to symbol
+function retrieveCategory() {
+    var categoryString = Storage.getValue("lastCategory");
+    // Simple reverse mapping lookup
+    if (categoryString == "work") { return :work; }
+    if (categoryString == "family") { return :family; }
+    if (categoryString == "friends") { return :friends; }
+    return null;
+}
+```
+
+### Storage Best Practices
+
+**Defensive Storage Access**:
+- Always check for null before using retrieved values
+- Maintain a simple one-to-one mapping between symbols and strings
+- Use direct conversions for data consistency
+- Keep string representations of symbols in a lookup table
+
+**Example - Simple Retrieval Pattern**:
+```
+function getSavedReminders() {
+    var reminders = Storage.getValue("reminders");
+    
+    // Simple null check is sufficient
+    if (reminders == null) {
+        return [];
+    }
+    
+    return reminders;
+}
+```
+
 ### Import Syntax and Resource Access
 
 **Import Syntax**: Use direct imports for modules, not file paths:
