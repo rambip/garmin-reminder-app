@@ -1,3 +1,7 @@
+This is your guide. Each time you learn something new, add a small section in this file.
+
+**HARD RULE: Maximum 5 lines added per edit to this file.**
+
 # Garmin Connect IQ Development Guidelines
 
 ## Concision
@@ -24,6 +28,8 @@ Local documentation is available in:
 - [`GARMIN_DOCS.md`](GARMIN_DOCS.md) - Comprehensive index
 
 ## Build & Run
+
+Build each time you add a feature.
 
 ```
 ./build.sh         # Compile for fr165 device
@@ -129,10 +135,14 @@ WatchUi.pushView(new Rez.Menus.MainMenu(), new MainMenuDelegate(), WatchUi.SLIDE
 // Handle menu selection with symbols
 function onSelect(item) {
     if (item.getId() == :add_reminder) {
-        // Handle add reminder selection
+        // Convert symbol to string immediately in onSelect
+        var categoryStr = getCategoryString(:work);
+        // Store and pass display strings only
     }
 }
 ```
+
+Symbol-to-string: Convert in onSelect, store display strings, no conversion needed when reading.
 
 ## Storage
 
@@ -151,6 +161,14 @@ function storeCategory(categorySymbol) {
 }
 ```
 
+
+## Build Annotations
+
+Conditional compilation using annotations:
+```
+(:debug) function log(message) { System.println("DEBUG: " + message); }
+(:release) function log(message) { }
+```
 
 ## Imports
 

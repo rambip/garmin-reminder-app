@@ -49,12 +49,13 @@ function getCategoryString(category) {
     return category;
 }
 
-// Helper function to get a time scope string from a time scope symbol or string
-function getTimeScopeString(timeScope) {
+// Helper function to get a time scope string from a time scope symbol
+// Call this immediately in onSelect to convert symbols to strings at the boundary
+function getTimeScopeString(timeScopeSymbol) {
     var timeScopeStrings = {
-        ":urgent" => Rez.Strings.TimeUrgent,
-        ":today" => Rez.Strings.TimeToday,
-        ":later" => Rez.Strings.TimeLater
+        :urgent => Rez.Strings.TimeUrgent,
+        :today => Rez.Strings.TimeToday,
+        :later => Rez.Strings.TimeLater
     };
 
     if (timeScopeStrings.hasKey(timeScopeSymbol)) {
@@ -79,7 +80,7 @@ function saveReminders(reminders) {
         Storage.setValue(STORAGE_KEY_REMINDERS, reminders);
         return true;
     } catch (ex) {
-        System.println("Error saving reminders: " + ex);
+        log("Error saving reminders: " + ex);
         return false;
     }
 }
@@ -107,25 +108,15 @@ function getTodayKey() {
 }
 
 // Add a new reminder
+// category and timeScope should already be display strings (converted in onSelect)
 function addReminder(category, timeScope, firstLetter) {
     var dateKey = getTodayKey();
 
-    // Convert symbols to strings before storing
-    var categoryStr = category;
-    if (category instanceof Symbol) {
-        categoryStr = category.toString();
-    }
-
-    var timeScopeStr = timeScope;
-    if (timeScope instanceof Symbol) {
-        timeScopeStr = timeScope.toString();
-    }
-
-    // Create a reminder object with string values instead of symbols
+    // Create a reminder object with display string values
     var reminder = {
         "date" => dateKey,
-        "category" => categoryStr,
-        "timeScope" => timeScopeStr,
+        "category" => category,
+        "timeScope" => timeScope,
         "firstLetter" => firstLetter
     };
 
