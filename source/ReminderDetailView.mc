@@ -5,6 +5,7 @@ import Toybox.Application.Storage;
 import Toybox.System;
 import Toybox.Timer;
 import Rez;
+using Toybox.Lang;
 
 // View to display the details of a selected reminder
 class ReminderDetailView extends WatchUi.View {
@@ -60,11 +61,28 @@ class ReminderDetailView extends WatchUi.View {
 
         // Set the dynamic text content if we have valid labels
         if (_categoryLabel != null && _reminder != null) {
-            _categoryLabel.setText(Lang.format("$1$ [$2$]", [_reminder["category"], _reminder["firstLetter"]]));
+            var category = _reminder["category"];
+            var firstLetter = _reminder["firstLetter"];
+
+            // Convert category symbol to string if needed
+            var categoryStr = category;
+            if (category instanceof Symbol) {
+                categoryStr = getCategoryString(category);
+            }
+
+            _categoryLabel.setText(Lang.format("$1$ [$2$]", [categoryStr, firstLetter]));
         }
 
         if (_timeScopeLabel != null && _reminder != null) {
-            _timeScopeLabel.setText(_reminder["timeScope"]);
+            var timeScope = _reminder["timeScope"];
+
+            // Convert timeScope symbol to string if needed
+            var timeScopeStr = timeScope;
+            if (timeScope instanceof Symbol) {
+                timeScopeStr = getTimeScopeString(timeScope);
+            }
+
+            _timeScopeLabel.setText(timeScopeStr);
         }
         System.println("DEBUG: ReminderDetailView onUpdate called");
         // Let the layout handle the rendering

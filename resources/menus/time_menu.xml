@@ -1,0 +1,19 @@
+<menus>
+    <menu2 id="TimeMenu" title="@Strings.TimeMenuTitle">
+        <menu-item id="urgent" label="@Strings.TimeUrgent">
+            <param
+                name="alignment"
+            >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
+        </menu-item>
+        <menu-item id="today" label="@Strings.TimeToday">
+            <param
+                name="alignment"
+            >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
+        </menu-item>
+        <menu-item id="later" label="@Strings.TimeLater">
+            <param
+                name="alignment"
+            >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
+        </menu-item>
+    </menu2>
+</menus>

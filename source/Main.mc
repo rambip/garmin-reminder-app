@@ -12,6 +12,39 @@ import Rez;
 // Constants
 const STORAGE_KEY_REMINDERS = "reminders";
 
+// Helper function to get a category string from a category symbol
+function getCategoryString(categorySymbol) {
+    var categoryStrings = {
+        :work => Rez.Strings.CategoryWork,
+        :friends => Rez.Strings.CategoryFriends,
+        :family => Rez.Strings.CategoryFamily,
+        :message => Rez.Strings.CategoryMessage,
+        :administrative => Rez.Strings.CategoryAdministrative,
+        :domestic => Rez.Strings.CategoryDomestic
+    };
+
+    if (categoryStrings.hasKey(categorySymbol)) {
+        return WatchUi.loadResource(categoryStrings[categorySymbol]);
+    }
+    // Fallback: convert symbol to string by removing the colon
+    return categorySymbol.toString().substring(1, null);
+}
+
+// Helper function to get a time scope string from a time scope symbol
+function getTimeScopeString(timeScopeSymbol) {
+    var timeScopeStrings = {
+        :urgent => Rez.Strings.TimeUrgent,
+        :today => Rez.Strings.TimeToday,
+        :later => Rez.Strings.TimeLater
+    };
+
+    if (timeScopeStrings.hasKey(timeScopeSymbol)) {
+        return WatchUi.loadResource(timeScopeStrings[timeScopeSymbol]);
+    }
+    // Fallback: convert symbol to string by removing the colon
+    return timeScopeSymbol.toString().substring(1, null);
+}
+
 // Get all reminders
 function getReminders() {
     var reminders = Storage.getValue(STORAGE_KEY_REMINDERS);
@@ -83,8 +116,7 @@ class Main extends Application.AppBase {
     }
 
     function getInitialView() {
-        var menuDelegate = new MainMenuDelegate();
-        return [menuDelegate.getMenu(), menuDelegate];
+        return [new Rez.Menus.MainMenu(), new MainMenuDelegate()];
     }
 
     function getGlanceView() {

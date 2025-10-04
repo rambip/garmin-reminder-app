@@ -1,0 +1,15 @@
+<menus>
+    <menu2 id="RemindersMenu" title="@Strings.RemindersMenuTitle">
+        <!-- This menu is dynamically populated, but we need at least one placeholder item -->
+        <menu-item
+            id="placeholder"
+            label="@Strings.NoRemindersLabel"
+            subLabel="@Strings.NoRemindersSubLabel"
+        >
+            <param
+                name="alignment"
+            >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
+        </menu-item>
+        <!-- The placeholder will be replaced with actual reminders or a no-reminders message -->
+    </menu2>
+</menus>

@@ -3,4 +3,31 @@
     <string id="DetailViewTitle">Reminder Details</string>
     <string id="ReminderAddedTitle">Reminder Added</string>
     <string id="PressBackToReturn">Press Back to return</string>
+
+    <!-- Main Menu -->
+    <string id="MainMenuTitle">Reminder App</string>
+    <string id="AddReminderLabel">Add Reminder</string>
+    <string id="AddReminderSubLabel">Create a new reminder</string>
+    <string id="SeeRemindersLabel">See Reminders</string>
+    <string id="SeeRemindersSubLabel">View your reminders</string>
+
+    <!-- Reminders Menu -->
+    <string id="RemindersMenuTitle">Reminders</string>
+    <string id="NoRemindersLabel">No reminders</string>
+    <string id="NoRemindersSubLabel">Add some!</string>
+
+    <!-- Category Menu -->
+    <string id="CategoryMenuTitle">Select Category</string>
+    <string id="CategoryWork">Work</string>
+    <string id="CategoryFriends">Friends</string>
+    <string id="CategoryFamily">Family</string>
+    <string id="CategoryMessage">Message</string>
+    <string id="CategoryAdministrative">Administrative</string>
+    <string id="CategoryDomestic">Domestic</string>
+
+    <!-- Time Menu -->
+    <string id="TimeMenuTitle">Select Time</string>
+    <string id="TimeUrgent">Urgent</string>
+    <string id="TimeToday">Today</string>
+    <string id="TimeLater">Later</string>
 </strings>

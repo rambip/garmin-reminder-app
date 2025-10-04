@@ -1,0 +1,22 @@
+<menus>
+    <menu2 id="MainMenu" title="@Strings.MainMenuTitle">
+        <menu-item
+            id="add_reminder"
+            label="@Strings.AddReminderLabel"
+            subLabel="@Strings.AddReminderSubLabel"
+        >
+            <param
+                name="alignment"
+            >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
+        </menu-item>
+        <menu-item
+            id="see_reminders"
+            label="@Strings.SeeRemindersLabel"
+            subLabel="@Strings.SeeRemindersSubLabel"
+        >
+            <param
+                name="alignment"
+            >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
+        </menu-item>
+    </menu2>
+</menus>

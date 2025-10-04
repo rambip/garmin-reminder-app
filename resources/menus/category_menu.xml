@@ -1,0 +1,34 @@
+<menus>
+    <menu2 id="CategoryMenu" title="@Strings.CategoryMenuTitle">
+        <menu-item id="work" label="@Strings.CategoryWork">
+            <param
+                name="alignment"
+            >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
+        </menu-item>
+        <menu-item id="friends" label="@Strings.CategoryFriends">
+            <param
+                name="alignment"
+            >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
+        </menu-item>
+        <menu-item id="family" label="@Strings.CategoryFamily">
+            <param
+                name="alignment"
+            >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
+        </menu-item>
+        <menu-item id="message" label="@Strings.CategoryMessage">
+            <param
+                name="alignment"
+            >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
+        </menu-item>
+        <menu-item id="administrative" label="@Strings.CategoryAdministrative">
+            <param
+                name="alignment"
+            >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
+        </menu-item>
+        <menu-item id="domestic" label="@Strings.CategoryDomestic">
+            <param
+                name="alignment"
+            >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
+        </menu-item>
+    </menu2>
+</menus>

@@ -1,75 +1,24 @@
 import Toybox.WatchUi;
 import Toybox.Graphics;
 import Rez;
+using Toybox.Lang;
+// Use the utility functions from StringUtils
 
 class CategoryMenuDelegate extends WatchUi.Menu2InputDelegate {
-    hidden var _menu;
-
     function initialize() {
         Menu2InputDelegate.initialize();
         System.println("DEBUG-NAV: CategoryMenuDelegate initialized");
-
-        // Create the menu
-        _menu = new WatchUi.Menu2({:title => "Select Category"});
-
-        // Populate the menu
-        _menu.addItem(new WatchUi.MenuItem(
-            "Work",
-            null,
-            "work",
-            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-        ));
-
-        _menu.addItem(new WatchUi.MenuItem(
-            "Friends",
-            null,
-            "friends",
-            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-        ));
-
-        _menu.addItem(new WatchUi.MenuItem(
-            "Family",
-            null,
-            "family",
-            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-        ));
-
-        _menu.addItem(new WatchUi.MenuItem(
-            "Message",
-            null,
-            "message",
-            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-        ));
-
-        _menu.addItem(new WatchUi.MenuItem(
-            "Administrative",
-            null,
-            "administrative",
-            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-        ));
-
-        _menu.addItem(new WatchUi.MenuItem(
-            "Domestic",
-            null,
-            "domestic",
-            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-        ));
     }
 
-    // Get the menu instance
-    function getMenu() {
-        System.println("DEBUG-NAV: CategoryMenuDelegate.getMenu called");
-        return _menu;
-    }
-
+    // When a category is selected
     function onSelect(item) {
         var category = item.getId();
         System.println("DEBUG-NAV: CategoryMenuDelegate.onSelect called with category: " + category);
 
-        System.println("DEBUG-NAV: Creating TimeMenuDelegate");
+        // Show the time scope menu
         var timeDelegate = new TimeMenuDelegate(category);
         System.println("DEBUG-NAV: About to push time menu view");
-        WatchUi.pushView(timeDelegate.getMenu(), timeDelegate, WatchUi.SLIDE_LEFT);
+        WatchUi.pushView(new Rez.Menus.TimeMenu(), timeDelegate, WatchUi.SLIDE_LEFT);
         System.println("DEBUG-NAV: Time menu view pushed");
     }
 
@@ -83,44 +32,14 @@ class CategoryMenuDelegate extends WatchUi.Menu2InputDelegate {
 
 class TimeMenuDelegate extends WatchUi.Menu2InputDelegate {
     hidden var _category;
-    hidden var _menu;
 
     function initialize(category) {
         Menu2InputDelegate.initialize();
         _category = category;
         System.println("DEBUG-NAV: TimeMenuDelegate initialized with category: " + category);
-
-        // Create the menu
-        _menu = new WatchUi.Menu2({:title => "Select Time"});
-
-        // Populate the menu
-        _menu.addItem(new WatchUi.MenuItem(
-            "Urgent",
-            null,
-            "urgent",
-            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-        ));
-
-        _menu.addItem(new WatchUi.MenuItem(
-            "Today",
-            null,
-            "today",
-            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-        ));
-
-        _menu.addItem(new WatchUi.MenuItem(
-            "Later",
-            null,
-            "later",
-            {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-        ));
     }
 
-    // Get the menu instance
-    function getMenu() {
-        System.println("DEBUG-NAV: TimeMenuDelegate.getMenu called");
-        return _menu;
-    }
+
 
     function onSelect(item) {
         var timeScope = item.getId();
@@ -284,10 +203,11 @@ class ReminderAddedView extends WatchUi.View {
 
     function initialize(category, timeScope, letter) {
         View.initialize();
+
         _category = category;
         _timeScope = timeScope;
         _letter = letter;
-        System.println("DEBUG-NAV: ReminderAddedView initialized with category: " + category + ", timeScope: " + timeScope + ", letter: " + letter);
+        System.println("DEBUG-NAV: ReminderAddedView initialized with category: " + _category + ", timeScope: " + _timeScope + ", letter: " + _letter);
     }
 
     function onLayout(dc) {
@@ -309,10 +229,14 @@ class ReminderAddedView extends WatchUi.View {
 
         // Set the dynamic text content
         if (_categoryLabel != null) {
-            _categoryLabel.setText(_category + " [" + _letter + "]");
+            // Get the string resource for the category
+            var categoryStr = getCategoryString(_category);
+            _categoryLabel.setText(categoryStr + " [" + _letter + "]");
         }
         if (_timeScopeLabel != null) {
-            _timeScopeLabel.setText(_timeScope);
+            // Get the string resource for the time scope
+            var timeScopeStr = getTimeScopeString(_timeScope);
+            _timeScopeLabel.setText(timeScopeStr);
         }
 
         // Let the layout handle the rendering
