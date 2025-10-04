@@ -186,3 +186,77 @@ _menu.addItem(new WatchUi.MenuItem(
     {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
 ));
 ```
+
+## Resource-Based Menus and Symbols
+
+### Menu Resource Structure
+
+**Format**: Menu resources must use the `<menus>` root tag, not `<resources>`.
+
+**Example**:
+```
+<menus>
+    <menu2 id="MainMenu" title="@Strings.MainMenuTitle">
+        <menu-item id="add_reminder" label="@Strings.AddReminderLabel" 
+                   subLabel="@Strings.AddReminderSubLabel">
+            <param name="alignment">WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
+        </menu-item>
+    </menu2>
+</menus>
+```
+
+**Usage**:
+- Place menu XML files in `resources/menus/` directory
+- Each file can contain multiple menu definitions
+- Reference string resources with `@Strings.StringId` format
+- The `param` tag is optional for simple menus
+
+### Working with Symbols
+
+**Menu Item IDs**: Menu resource IDs are converted to symbols in Monkey C:
+- XML: `id="add_reminder"` becomes the symbol `:add_reminder` in code
+- Compare using symbol equality: `if (itemId == :add_reminder)`
+- NOT as strings: `if (itemId.equals("add_reminder"))` will fail
+
+**Using Resource-Based Menus**:
+
+```
+// Push a menu from resources
+WatchUi.pushView(new Rez.Menus.MainMenu(), new MainMenuDelegate(), WatchUi.SLIDE_UP);
+
+// Handle menu selection with symbols
+function onSelect(item) {
+    var itemId = item.getId();  // Returns a symbol like :add_reminder
+    if (itemId == :add_reminder) {
+        // Handle add reminder selection
+    }
+}
+```
+
+**Converting Symbols for Display**:
+```
+// Create a mapping of symbols to string resources
+var categoryStrings = {
+    :work => Rez.Strings.CategoryWork,
+    :family => Rez.Strings.CategoryFamily
+};
+
+// Convert symbol to display string
+if (categoryStrings.hasKey(categorySymbol)) {
+    return WatchUi.loadResource(categoryStrings[categorySymbol]);
+}
+```
+
+### Import Syntax and Resource Access
+
+**Import Syntax**: Use direct imports for modules, not file paths:
+```
+import Toybox.WatchUi;
+import Toybox.Graphics;
+import Rez;  // Auto-generated module for all resources
+```
+
+**Resource Access**: No need for a main resources.xml file:
+- Resources are discovered automatically based on directory structure
+- Access resources via the `Rez` namespace
+- Example: `Rez.Menus.MainMenu()`, `Rez.Strings.TimeUrgent`, `Rez.Layouts.DetailView(dc)`
