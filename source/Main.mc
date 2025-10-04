@@ -12,30 +12,49 @@ import Rez;
 // Constants
 const STORAGE_KEY_REMINDERS = "reminders";
 
-// Helper function to get a category string from a category symbol
-function getCategoryString(categorySymbol) {
+// Helper function to get a category string from a category symbol or string
+function getCategoryString(category) {
+    // Define category string resources
     var categoryStrings = {
-        :work => Rez.Strings.CategoryWork,
-        :friends => Rez.Strings.CategoryFriends,
-        :family => Rez.Strings.CategoryFamily,
-        :message => Rez.Strings.CategoryMessage,
-        :administrative => Rez.Strings.CategoryAdministrative,
-        :domestic => Rez.Strings.CategoryDomestic
+        ":work" => Rez.Strings.CategoryWork,
+        ":friends" => Rez.Strings.CategoryFriends,
+        ":family" => Rez.Strings.CategoryFamily,
+        ":message" => Rez.Strings.CategoryMessage,
+        ":administrative" => Rez.Strings.CategoryAdministrative,
+        ":domestic" => Rez.Strings.CategoryDomestic
     };
 
-    if (categoryStrings.hasKey(categorySymbol)) {
-        return WatchUi.loadResource(categoryStrings[categorySymbol]);
+    // Handle Symbol objects
+    if (category instanceof Symbol) {
+        var key = category.toString();
+        if (categoryStrings.hasKey(key)) {
+            return WatchUi.loadResource(categoryStrings[key]);
+        }
+        // Fallback: convert symbol to string by removing the colon
+        return key.substring(1, null);
     }
-    // Fallback: convert symbol to string by removing the colon
-    return categorySymbol.toString().substring(1, null);
+
+    // Handle strings (stored in Storage)
+    if (category instanceof String) {
+        if (categoryStrings.hasKey(category)) {
+            return WatchUi.loadResource(categoryStrings[category]);
+        }
+        // If it's a string that starts with a colon (stored symbol)
+        if (category.substring(0, 1).equals(":")) {
+            return category.substring(1, null);
+        }
+    }
+
+    // Default fallback
+    return category;
 }
 
-// Helper function to get a time scope string from a time scope symbol
-function getTimeScopeString(timeScopeSymbol) {
+// Helper function to get a time scope string from a time scope symbol or string
+function getTimeScopeString(timeScope) {
     var timeScopeStrings = {
-        :urgent => Rez.Strings.TimeUrgent,
-        :today => Rez.Strings.TimeToday,
-        :later => Rez.Strings.TimeLater
+        ":urgent" => Rez.Strings.TimeUrgent,
+        ":today" => Rez.Strings.TimeToday,
+        ":later" => Rez.Strings.TimeLater
     };
 
     if (timeScopeStrings.hasKey(timeScopeSymbol)) {
@@ -91,11 +110,22 @@ function getTodayKey() {
 function addReminder(category, timeScope, firstLetter) {
     var dateKey = getTodayKey();
 
-    // Create a reminder object
+    // Convert symbols to strings before storing
+    var categoryStr = category;
+    if (category instanceof Symbol) {
+        categoryStr = category.toString();
+    }
+
+    var timeScopeStr = timeScope;
+    if (timeScope instanceof Symbol) {
+        timeScopeStr = timeScope.toString();
+    }
+
+    // Create a reminder object with string values instead of symbols
     var reminder = {
         "date" => dateKey,
-        "category" => category,
-        "timeScope" => timeScope,
+        "category" => categoryStr,
+        "timeScope" => timeScopeStr,
         "firstLetter" => firstLetter
     };
 

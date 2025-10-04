@@ -57,16 +57,10 @@ class MainMenuDelegate extends WatchUi.Menu2InputDelegate {
                     var timeScope = todayReminders[i]["timeScope"];
                     var firstLetter = todayReminders[i]["firstLetter"];
 
-                    // Convert category and timeScope symbols to strings if needed
-                    var categoryStr = category;
-                    if (category instanceof Symbol) {
-                        categoryStr = getCategoryString(category);
-                    }
-
-                    var timeScopeStr = timeScope;
-                    if (timeScope instanceof Symbol) {
-                        timeScopeStr = getTimeScopeString(timeScope);
-                    }
+                    // Get display strings for category and timeScope
+                    // These will handle both symbols and strings properly
+                    var categoryStr = getCategoryString(category);
+                    var timeScopeStr = getTimeScopeString(timeScope);
 
                     // Create display format with full category name and first letter
                     menu.addItem(new WatchUi.MenuItem(

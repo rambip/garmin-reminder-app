@@ -229,12 +229,12 @@ class ReminderAddedView extends WatchUi.View {
 
         // Set the dynamic text content
         if (_categoryLabel != null) {
-            // Get the string resource for the category
+            // Get the display string for the category (handles both symbols and strings)
             var categoryStr = getCategoryString(_category);
             _categoryLabel.setText(categoryStr + " [" + _letter + "]");
         }
         if (_timeScopeLabel != null) {
-            // Get the string resource for the time scope
+            // Get the display string for the time scope (handles both symbols and strings)
             var timeScopeStr = getTimeScopeString(_timeScope);
             _timeScopeLabel.setText(timeScopeStr);
         }

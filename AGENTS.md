@@ -149,22 +149,6 @@ function storeCategory(categorySymbol) {
         Storage.setValue("lastCategory", stringMap[categorySymbol]);
     }
 }
-
-// Retrieve and convert back to symbol
-function retrieveCategory() {
-    var categoryString = Storage.getValue("lastCategory");
-    if (categoryString == "work") { return :work; }
-    if (categoryString == "family") { return :family; }
-    return null;
-}
-```
-
-Defensive access:
-```
-function getSavedReminders() {
-    var reminders = Storage.getValue("reminders");
-    return (reminders == null) ? [] : reminders;
-}
 ```
 
 

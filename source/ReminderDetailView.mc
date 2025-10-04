@@ -64,24 +64,16 @@ class ReminderDetailView extends WatchUi.View {
             var category = _reminder["category"];
             var firstLetter = _reminder["firstLetter"];
 
-            // Convert category symbol to string if needed
-            var categoryStr = category;
-            if (category instanceof Symbol) {
-                categoryStr = getCategoryString(category);
-            }
-
+            // Get display string for category (handles both symbols and strings)
+            var categoryStr = getCategoryString(category);
             _categoryLabel.setText(Lang.format("$1$ [$2$]", [categoryStr, firstLetter]));
         }
 
         if (_timeScopeLabel != null && _reminder != null) {
             var timeScope = _reminder["timeScope"];
 
-            // Convert timeScope symbol to string if needed
-            var timeScopeStr = timeScope;
-            if (timeScope instanceof Symbol) {
-                timeScopeStr = getTimeScopeString(timeScope);
-            }
-
+            // Get display string for timeScope (handles both symbols and strings)
+            var timeScopeStr = getTimeScopeString(timeScope);
             _timeScopeLabel.setText(timeScopeStr);
         }
         System.println("DEBUG: ReminderDetailView onUpdate called");
