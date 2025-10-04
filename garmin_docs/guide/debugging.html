@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Debugging - Garmin Connect IQ Documentation</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; }
+        h1 { color: #333; }
+        pre { background-color: #f5f5f5; padding: 10px; border-radius: 4px; overflow: auto; }
+        code { font-family: monospace; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f2f2f2; }
+        img { max-width: 100%; }
+    </style>
+</head>
+<body>
+    <h1>Debugging</h1>
+    <div class="c0123 c0126">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/><meta charset="utf-8"/><meta content="(C) Copyright 2025" name="copyright"/><meta content="(C) Copyright 2025" name="DC.rights.owner"/><meta content="topic" name="DC.type"/><meta content="HTML5" name="DC.format"/><meta content="testing-and-debugging" name="DC.identifier"/><link href="../../commonltr.css" rel="stylesheet" type="text/css"/><title>Testing and Debugging</title><main role="main"><article aria-labelledby="ariaid-title1" role="article"><h1 class="title topictitle1" id="ariaid-title1">Testing and Debugging</h1><div class="body"><figure class="fig fignone">
+<img class="image" src="/connect-iq/resources/programmers-guide/chopper-monkey.png"/><br/>
+</figure><p class="p">Connect IQ has a couple of different methods for testing and debugging your apps:</p><ol class="ol"><li class="li"><p class="p">Basic debugging with <code class="ph codeph">println()</code> statements</p></li><li class="li"><p class="p">Using the Visual Studio Code debugger</p></li><li class="li"><p class="p">Using the command line debugger (<code class="ph codeph">mdd</code>)</p></li></ol></div><article aria-labelledby="ariaid-title2" class="topic nested1" id="basic-debugging"><h2 class="title topictitle2" id="ariaid-title2">Basic Debugging</h2><div class="body"><p class="p">One way to test Connect IQ apps is to include <a class="xref" href="https://developer.garmin.com/connect-iq/api-docs/Toybox/System.html#println-instance_function" target="_blank">System.println()</a> statements at strategic points in your app. Within Visual Studio Code, these <a class="xref" href="https://developer.garmin.com/connect-iq/api-docs/Toybox/System.html#println-instance_function" target="_blank">System.println()</a> statements will output to the console. On a device, <a class="xref" href="https://developer.garmin.com/connect-iq/api-docs/Toybox/System.html#println-instance_function" target="_blank">System.println()</a> statements write to an <code class="ph codeph">&lt;APPNAME&gt;.TXT file</code> in the  <code class="ph codeph">/GARMIN/APPS/LOGS</code> directory in the device file system.</p><p class="p">These log files are not automatically created, so they must be manually created on the device and named to match the name of the app's corresponding <code class="ph codeph">PRG</code> file. For example, to log output from <code class="ph codeph">/GARMIN/APPS/MYAPP.PRG</code>, you must create <code class="ph codeph">/GARMIN/APPS/LOGS/MYAPP.TXT</code>.</p></div></article><article aria-labelledby="ariaid-title3" class="topic nested1" id="debugging-with-visual-studio-code"><h2 class="title topictitle2" id="ariaid-title3">Debugging with Visual Studio Code</h2><div class="body"><p class="p">To begin debugging your application select <em class="ph i">Run &gt; Start Debugging</em>. Make sure you have a source file from the project you wish to debug open in the editor. After selecting the product you want to debug, the app will launch in debug mode in the simulator. Debugging is only supported while running an application on the Connect IQ simulator.</p></div><article aria-labelledby="ariaid-title4" class="topic nested2" id="setting-a-breakpoint"><h3 class="title topictitle3" id="ariaid-title4">Setting a Breakpoint</h3><div class="body"><p class="p">Like other projects in Visual Studio Code, to set a breakpoint in the Monkey C editor, highlight a line in the vertical ruler next to the source code and click to set a breakpoint.</p><figure class="fig fignone">
+<img class="image" src="/connect-iq/resources/programmers-guide/vscode-breakpoint.png"/><br/>
+</figure></div></article><article aria-labelledby="ariaid-title5" class="topic nested2" id="viewing-application-status"><h3 class="title topictitle3" id="ariaid-title5">Viewing Application Status</h3><div class="body"><p class="p">When your application hits a breakpoint, you can examine the runtime state in <em class="ph i">Run and Debug</em>. The <em class="ph i">Variables</em> view allows you to see your arguments and locals, while the <em class="ph i">Call Stack</em> allows you to see state at different stack frame.</p><p class="p">When your application suspends while debugging you will be prompted to open the native <em class="ph i">Debug</em> perspective. From here, you can view the stack trace within the native Debug view. Clicking on a stack frame within the stack trace will populate the native Variables view with the applicable variables at that stack frame. Global variables will only be visible in the top stack frame; they appear as the <code class="ph codeph">$</code> variable within that stack frame.</p><figure class="fig fignone">
+<img class="image" src="/connect-iq/resources/programmers-guide/vscode-debugging.png"/><br/>
+</figure></div></article></article><article aria-labelledby="ariaid-title6" class="topic nested1" id="debugging-with-the-command-line"><h2 class="title topictitle2" id="ariaid-title6">Debugging with the Command Line</h2><div class="body"><p class="p"><code class="ph codeph">mdd</code> is the Monkey C command line debugger. Modeled after <code class="ph codeph">gdb</code>, <code class="ph codeph">mdd</code> allows you to load your executables, set breakpoints, and examine stack frames, local variables, and the global environment.</p></div><article aria-labelledby="ariaid-title7" class="topic nested2" id="getting-started"><h3 class="title topictitle3" id="ariaid-title7">Getting Started</h3><div class="body"><p class="p">Make sure you have followed the "Getting Started" instructions to set up the command line environment. Before you begin, start the simulator:</p><pre class="pre codeblock bash"><code>&gt; simulator &amp;
+[1] 27984
+&gt; mdd</code></pre><p class="p">You will be greeted with the following:</p><pre class="pre codeblock"><code>Connect IQ Version 3.2.0. Type "help" for more information.
+(mdd)</code></pre><p class="p">Help is always available from the command line prompt:</p><pre class="pre codeblock"><code>(mdd) help
+List of classes of commands:
+
+breakpoints -- Making program stop at certain points.
+data -- Examining data.
+running -- Running the program.
+stack -- Examining the stack.
+status -- Status inquiries.
+support -- Support facilities.
+
+Type "help" followed by a class name for a list of commands in that class.
+Type "help all" for the list of all commands.
+Type "help" followed by a command name for full documentation.
+Command name abbreviations are allowed if defined.</code></pre></div></article><article aria-labelledby="ariaid-title8" class="topic nested2" id="loading-and-running-an-executable"><h3 class="title topictitle3" id="ariaid-title8">Loading and Running an Executable</h3><div class="body"><p class="p">To load an executable into <code class="ph codeph">mdd</code>, you need the <code class="ph codeph">prg</code>, the debug XML and the product the <code class="ph codeph">prg</code> is built for. If you compile your <code class="ph codeph">prg</code> using the <code class="ph codeph">monkeyc</code> command, the <code class="ph codeph">debug.xml</code> will also be generated, and Visual Studio Code typically outputs these files in the <code class="ph codeph">bin</code> folder of your project.</p><p class="p">You use the <code class="ph codeph">file</code> command to load these into the <code class="ph codeph">mdd</code> environment.</p><pre class="pre codeblock"><code>(mdd) file MyFace.prg MyFace.prg.debug.xml fenix6</code></pre><p class="p">Now you can run the executable using the <code class="ph codeph">run</code> command:</p><pre class="pre codeblock"><code>(mdd) r
+Starting app: C:\Projects\ciq-apps\strava\bin\Strava.prg</code></pre></div></article><article aria-labelledby="ariaid-title9" class="topic nested2" id="setting-breakpoints"><h3 class="title topictitle3" id="ariaid-title9">Setting Breakpoints</h3><div class="body"><p class="p">Breakpoints can be assigned to a file/line pair with the <code class="ph codeph">break</code> command:</p><pre class="pre codeblock"><code>(mdd) break \path\to\Thx.mc:1138</code></pre><p class="p">Execution will pause when your program executes that line:</p><pre class="pre codeblock"><code>Hit breakpoint 1, initialize () at Thx.mc:1138
+(mdd)</code></pre></div></article><article aria-labelledby="ariaid-title10" class="topic nested2" id="frame-information"><h3 class="title topictitle3" id="ariaid-title10">Frame Information</h3><div class="body"><p class="p">You can inquire about your current stack frame using <code class="ph codeph">info frame</code>:</p><pre class="pre codeblock"><code>(mdd) info frame
+Stack level 0, frame at 0x10002120
+ in initialize() at Thx.mc:1138
+ called by frame at 0x10000b48
+ Args:
+      self = &lt;0x84&gt; (Thx)
+ Locals:
+      thx = null
+      sen = null</code></pre><p class="p">You can also use the <code class="ph codeph">print</code> command to output variables as well as expressions.</p><pre class="pre codeblock"><code>(mdd) print thx
+thx = null</code></pre></div></article><article aria-labelledby="ariaid-title11" class="topic nested2" id="controlling-execution"><h3 class="title topictitle3" id="ariaid-title11">Controlling Execution</h3><div class="body"><p class="p">You can step to the next line using the <code class="ph codeph">next</code> command:</p><pre class="pre codeblock"><code>(mdd) next</code></pre><p class="p">The <code class="ph codeph">step</code> command will step into a subroutine:</p><pre class="pre codeblock"><code>(mdd) step</code></pre><p class="p">The <code class="ph codeph">continue</code> command will return to full execution until the next breakpoint is set or the app terminates:</p><pre class="pre codeblock"><code>(mdd) continue</code></pre></div></article></article><article aria-labelledby="ariaid-title12" class="topic nested1" id="handling-crashes"><h2 class="title topictitle2" id="ariaid-title12">Handling Crashes</h2><div class="body"><p class="p">Despite the best debugging efforts, crashes will sometimes happen. There are two general types of on-device crash that can occur related to Connect IQ, which each generate log files: <em class="ph i">app crashes</em> and <em class="ph i">device crashes</em>.</p></div><article aria-labelledby="ariaid-title13" class="topic nested2" id="app-crashes"><h3 class="title topictitle3" id="ariaid-title13">App Crashes</h3><div class="body"><p class="p">App crashes typically result in an app quitting unexpectedly or displaying an 'IQ!' icon, but does not cause the entire device to crash or reboot. This kind of crash is most commonly due to a bug in an app, though it can also be due to a bug in Connect IQ itself. Whenever an app crash occurs, a <code class="ph codeph">CIQ_LOG.YAML</code> file is written or updated to <code class="ph codeph">/GARMIN/APPS/LOGS</code> on the device, and contains information related to the crash that app developers may use to address the problem. Here is what a CIQ_LOG generally looks like:</p><pre class="pre codeblock YAML"><code>Error: ErrorName
+Details: Error description.
+Time: 2018-02-07T19:07:56Z
+Store-Id: 00000000-0000-0000-0000-000000000000
+Store-Version: 0
+Device-Id: 006-B0000-00
+Device-Version: '0.00'
+ConnectIQ-Version: 3.0.0
+Filename: PRGNAME
+Appname: DemoAppName
+Stack:
+  - pc: 0x100000ef
+    File: 'C:\Path\To\source\File.mc'
+    Line: 53
+    Function: function_causing_error
+  - pc: 0x10000080
+    File: 'C:\Path\To\source\File2.mc'
+    Line: 30
+    Function: otherBrokenItems</code></pre><p class="p">The <code class="ph codeph">ConnectIQ-Version</code> entry is not the Connect IQ version of the device. Rather, this refers to the SDK version used by the developer when exporting the application.</p><p class="p"><strong class="ph b">Note:</strong> For devices before API level 3.0.0, a simplified error log will be printed as <code class="ph codeph">CIQ_LOG.TXT</code>.</p></div></article><article aria-labelledby="ariaid-title14" class="topic nested2" id="device-crashes"><h3 class="title topictitle3" id="ariaid-title14">Device Crashes</h3><div class="body"><p class="p">Device crashes typically cause the device to reboot or freeze. These indicate a Connect IQ or device firmware bug, and should be much less common than app crashes. When a device crash occurs, an <code class="ph codeph">ERR_LOG.txt</code> file is written to <code class="ph codeph">/GARMIN</code> on the device, containing stack trace information related to the crash. Please provide this file when reporting a crash on our developer forum. Garmin's device teams can take a look at the device crash logs to determine the cause of the crash and will typically provide a fix in a future firmware release.</p></div></article><article aria-labelledby="ariaid-title15" class="topic nested2" id="a-note-about-log-files"><h3 class="title topictitle3" id="ariaid-title15">A Note About Log Files</h3><div class="body"><p class="p">When any log file on a device exceeds 5kb in size, it will automatically be archived to <code class="ph codeph">&lt;LOGNAME&gt;.BAK</code>, and a new log will be started. Any old <code class="ph codeph">.BAK</code> files will be overwritten when the archive occurs, so the max space a log can reach is around 10kb.</p></div></article></article></article></main></div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Monkey Style - Garmin Connect IQ Documentation</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; }
+        h1 { color: #333; }
+        pre { background-color: #f5f5f5; padding: 10px; border-radius: 4px; overflow: auto; }
+        code { font-family: monospace; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f2f2f2; }
+        img { max-width: 100%; }
+    </style>
+</head>
+<body>
+    <h1>Monkey Style</h1>
+    <div class="c0123 c0126">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/><meta charset="utf-8"/><meta content="(C) Copyright 2025" name="copyright"/><meta content="(C) Copyright 2025" name="DC.rights.owner"/><meta content="topic" name="DC.type"/><meta content="HTML5" name="DC.format"/><meta content="monkey-style" name="DC.identifier"/><link href="../../commonltr.css" rel="stylesheet" type="text/css"/><title>Monkey Style</title><main role="main"><article aria-labelledby="ariaid-title1" role="article"><h1 class="title topictitle1" id="ariaid-title1">Monkey Style</h1><div class="body"><p class="p">Monkey style is a domain-specific property language for managing style elements. It borrows heavily from CSS but has been tailored for Monkey C. Monkey style allows developers to create style property constants that can adapt between Garmin products.</p></div><article aria-labelledby="ariaid-title2" class="topic nested1" id="personality-classes"><h2 class="title topictitle2" id="ariaid-title2">Personality Classes</h2><div class="body"><p class="p">Monkey style allow you to create personality classes of constants. These classes can be defined using the following syntax:</p><pre class="pre codeblock css"><code>personality_class {
+    property: "constant";
+}</code></pre><p class="p">Personality classes and properties have to be named with Monkey C legal names and can have the following value types:</p><table class="table"><caption></caption><colgroup><col/><col/></colgroup><thead class="thead"><tr class="row"><th class="entry" id="personality-classes__entry__1">Type</th><th class="entry" id="personality-classes__entry__2">Example</th></tr></thead><tbody class="tbody"><tr class="row"><td class="entry" headers="personality-classes__entry__1">Number</td><td class="entry" headers="personality-classes__entry__2">500</td></tr><tr class="row"><td class="entry" headers="personality-classes__entry__1">Percent</td><td class="entry" headers="personality-classes__entry__2">80%</td></tr><tr class="row"><td class="entry" headers="personality-classes__entry__1">String</td><td class="entry" headers="personality-classes__entry__2">“What’s the deal with style sheets?”</td></tr><tr class="row"><td class="entry" headers="personality-classes__entry__1">Boolean</td><td class="entry" headers="personality-classes__entry__2">true</td></tr><tr class="row"><td class="entry" headers="personality-classes__entry__1">Color</td><td class="entry" headers="personality-classes__entry__2">#555555</td></tr><tr class="row"><td class="entry" headers="personality-classes__entry__1">Symbol</td><td class="entry" headers="personality-classes__entry__2"><code class="ph codeph">:myBitmap</code></td></tr><tr class="row"><td class="entry" headers="personality-classes__entry__1">Resource</td><td class="entry" headers="personality-classes__entry__2"><code class="ph codeph">@Rez.Strings.promptTitle</code></td></tr><tr class="row"><td class="entry" headers="personality-classes__entry__1">API Constant</td><td class="entry" headers="personality-classes__entry__2"><code class="ph codeph">Graphics.TEXT_JUSTIFY_CENTER</code></td></tr><tr class="row"><td class="entry" headers="personality-classes__entry__1">Array</td><td class="entry" headers="personality-classes__entry__2"><code class="ph codeph">[Graphics.FONT_SMALL, Graphics.FONT_TINY]</code></td></tr></tbody></table></div></article><article aria-labelledby="ariaid-title3" class="topic nested1" id="resource-compiler"><h2 class="title topictitle2" id="ariaid-title3">Resource Compiler</h2><div class="body"><p class="p">Personality classes can be referenced by resource compiler elements using the <code class="ph codeph">personality</code> attribute. The <code class="ph codeph">personality</code> attribute can reference multiple space-separated personality classes.</p><p class="p">For example, you can have a personality class with the following definition:</p><pre class="pre codeblock css"><code>layout1__time {
+    x: "center";
+    y: 10%;
+    font: Graphics.FONT_LARGE;
+    justification: Graphics.TEXT_JUSTIFY_CENTER;
+    color: Graphics.COLOR_BLUE;
+}</code></pre><p class="p">This can then be referenced in your layout:</p><pre class="pre codeblock xml"><code>&lt;layout id="WatchFace"&gt;
+    &lt;drawable class="Background" /&gt;
+    &lt;label id="TimeLabel" personality="layout1__time" /&gt;
+&lt;/layout&gt;</code></pre></div></article><article aria-labelledby="ariaid-title4" class="topic nested1" id="using-personality-classes-in-source"><h2 class="title topictitle2" id="ariaid-title4">Using Personality Classes in Source</h2><div class="body"><p class="p">Any personality class you define is addressable from the <code class="ph codeph">Rez.Styles</code> namespace. The class is defined as a module of constant values that you can address via its name.</p><pre class="pre codeblock typescript"><code>dc.setFont(Rez.Styles.layout1__time.font);</code></pre><p class="p">When referenced this way, the compiler can replace the constant references at compile time and eliminate the personality classes from your runtime.</p></div></article><article aria-labelledby="ariaid-title5" class="topic nested1" id="configuring-personalities"><h2 class="title topictitle2" id="ariaid-title5">Configuring Personalities</h2><div class="body"><p class="p">You can configure the series of monkey style sheets in the jungle. This allows you to have specific style sheets for each product while keeping the content universal across products. You can configure the personality with the <code class="ph codeph">personality</code> selector:</p><pre class="pre codeblock properties"><code>fenix7system6preview.personality=$(fenix7system6preview.personality);resources-fenix2022</code></pre></div></article></article></main></div>
+</body>
+</html>

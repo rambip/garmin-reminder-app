@@ -6,9 +6,13 @@ This document describes the Garmin Connect IQ best practices for application dev
 
 ## API Documentation
 
-Garmin Connect IQ API Documentation: https://developer.garmin.com/connect-iq/api-docs/
+The Garmin documentation has been downloaded and is available locally in the following directories:
+- API documentation: `garmin_docs/api/` - Contains the Connect IQ API reference
+- Developer guide: `garmin_docs/guide/` - Contains implementation guides and tutorials
 
-A comprehensive index of Garmin Connect IQ documentation resources is available in the `GARMIN_DOCS.md` file, which contains organized links to all core topics of the Garmin development platform.
+A comprehensive index of the local Garmin Connect IQ documentation is available in the [`GARMIN_DOCS.md`](GARMIN_DOCS.md) file, which organizes all the available resources by category and provides direct links to the HTML documentation files.
+
+These local docs can be accessed offline and provide comprehensive information about the Garmin Connect IQ platform, APIs, and development practices.
 
 ## Build System
 
@@ -140,9 +144,28 @@ function onHide() {
 
 **Usage**:
 - Layout files are placed in the `resources/layouts/` directory
-- Layout references are defined in `resources.xml` for compilation
 - Views access layouts via `setLayout(Rez.Layouts.MyLayout(dc))` in their `onLayout` method
 - UI element references must be obtained in `onShow()` using `findDrawableById()`, not in `onUpdate()`
+- Note: A top-level `resources.xml` file is NOT needed as the compiler automatically scans the resources directory structure
+
+### Resource Compilation
+
+**Directory Structure**: The Garmin resource compiler automatically processes resources based on a standard directory structure:
+- `resources/` - Base resources directory
+  - `strings/` - String resources (strings.xml)
+  - `layouts/` - Layout definitions
+  - `drawables/` - Images and bitmap resources
+  - `menus/` - Menu definitions
+  - `fonts/` - Custom font resources
+
+**Automatic Resource Discovery**: The compiler scans this directory structure and automatically builds the resource database. Individual resource files in these directories are detected and compiled without requiring explicit references in a central resources.xml file.
+
+**Resource Qualifiers**: Resource folders can have qualifiers to target specific:
+- Device models (e.g., `resources-fr165/`)
+- Languages (e.g., `resources-deu/` for German)
+- Screen sizes (e.g., `resources-round-218x218/`)
+
+**Resource Access**: All properly placed resources are available through the auto-generated `Rez` module without any additional configuration.
 
 ## Menu Display Implementation
 

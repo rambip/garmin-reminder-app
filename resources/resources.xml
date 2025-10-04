@@ -1,8 +1,0 @@
-<resources>
-    <strings>
-        <string id="AppName">Hello app</string>
-        <string id="DetailViewTitle">Reminder Details</string>
-        <string id="ReminderAddedTitle">Reminder Added</string>
-        <string id="PressBackToReturn">Press Back to return</string>
-    </strings>
-</resources>

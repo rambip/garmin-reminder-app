@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Profiling - Garmin Connect IQ Documentation</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; }
+        h1 { color: #333; }
+        pre { background-color: #f5f5f5; padding: 10px; border-radius: 4px; overflow: auto; }
+        code { font-family: monospace; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f2f2f2; }
+        img { max-width: 100%; }
+    </style>
+</head>
+<body>
+    <h1>Profiling</h1>
+    <div class="c0123 c0126">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/><meta charset="utf-8"/><meta content="(C) Copyright 2025" name="copyright"/><meta content="(C) Copyright 2025" name="DC.rights.owner"/><meta content="topic" name="DC.type"/><meta content="HTML5" name="DC.format"/><meta content="profiling-applications" name="DC.identifier"/><link href="../../commonltr.css" rel="stylesheet" type="text/css"/><title>Profiling Applications</title><main role="main"><article aria-labelledby="ariaid-title1" role="article"><h1 class="title topictitle1" id="ariaid-title1">Profiling Applications</h1><div class="body"><p class="p">The Connect IQ profiler captures time spent in total within a function and for the
+code within a function, and lets you examine the different call stacks
+profiled. The profiler is integrated into the simulator, and the devices will
+allow hardware profiling as well.</p></div><article aria-labelledby="ariaid-title2" class="topic nested1" id="profiling-from-the-simulator"><h2 class="title topictitle2" id="ariaid-title2">Profiling from the Simulator</h2><div class="body"><p class="p">To launch the profiler from the Simulator, go to <em class="ph i">File -&gt; View Profiler</em>. You will see the following:</p><figure class="fig fignone">
+<img class="image" src="/connect-iq/resources/programmers-guide/profiler-empty.png"/><br/>
+</figure><p class="p">When you reach the point in your application you wish to profile, hit the “Start”
+button to begin data collection and hit “Stop” to finish. The data will then display
+in the profiler window:</p><figure class="fig fignone">
+<img class="image" src="/connect-iq/resources/programmers-guide/profiler.png"/><br/>
+</figure><p class="p">The data collected is as follows:</p><table class="table"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="thead"><tr class="row"><th class="entry" id="profiling-from-the-simulator__entry__1">Name</th><th class="entry" id="profiling-from-the-simulator__entry__2">Description</th><th class="entry" id="profiling-from-the-simulator__entry__3">Notes</th></tr></thead><tbody class="tbody"><tr class="row"><td class="entry" headers="profiling-from-the-simulator__entry__1">Function</td><td class="entry" headers="profiling-from-the-simulator__entry__2">The function signature being called</td><td class="entry" headers="profiling-from-the-simulator__entry__3"> </td></tr><tr class="row"><td class="entry" headers="profiling-from-the-simulator__entry__1">Total Time (us)</td><td class="entry" headers="profiling-from-the-simulator__entry__2">The total time executing the function in microseconds.</td><td class="entry" headers="profiling-from-the-simulator__entry__3">This includes all calls during the capture duration.</td></tr><tr class="row"><td class="entry" headers="profiling-from-the-simulator__entry__1">Actual Time (us)</td><td class="entry" headers="profiling-from-the-simulator__entry__2">The time spent within the function in microseconds.</td><td class="entry" headers="profiling-from-the-simulator__entry__3">This includes all calls during the capture duration, but ignores time spent calling other functions.</td></tr><tr class="row"><td class="entry" headers="profiling-from-the-simulator__entry__1">Average Time (us)</td><td class="entry" headers="profiling-from-the-simulator__entry__2">The average amount of time per call spent in the function in microseconds</td><td class="entry" headers="profiling-from-the-simulator__entry__3">This is the average of the time to execute the function</td></tr><tr class="row"><td class="entry" headers="profiling-from-the-simulator__entry__1">Call Count</td><td class="entry" headers="profiling-from-the-simulator__entry__2">Number of times the function was called during the sample period</td><td class="entry" headers="profiling-from-the-simulator__entry__3"> </td></tr><tr class="row"><td class="entry" headers="profiling-from-the-simulator__entry__1">Call Stack</td><td class="entry" headers="profiling-from-the-simulator__entry__2">Indication of which functions invoked the sampled function</td><td class="entry" headers="profiling-from-the-simulator__entry__3"> </td></tr></tbody></table><p class="p">If you only want to sample for a period, you can set a sample period in <em class="ph i">Profiler -&gt; Settings</em>. This will automatically stop the profiler after the specified period.</p></div></article><article aria-labelledby="ariaid-title3" class="topic nested1" id="profiling-on-the-device"><h2 class="title topictitle2" id="ariaid-title3">Profiling on the Device</h2><div class="body"><p class="p">You can profile your app on device by compiling the app with the <code class="ph codeph">-k</code> option. To do this in Visual Studio Code, edit the workspace settings edit the Monkey C Compiler Options:</p><figure class="fig fignone">
+<img class="image" src="/connect-iq/resources/programmers-guide/profiler-command-line.png"/><br/>
+</figure><p class="p">After you do that, use <em class="ph i">Monkey C: Build for Device</em> to create an executable. After you side load and run the program, a file named <code class="ph codeph">&lt;appname&gt;.PRF</code> will be generated in the <code class="ph codeph">GARMIN\APPS\LOGS</code> folder. You can load the PRF file into the simulator profile tool for analysis using the <em class="ph i">Load</em> button in the profiler window.</p></div></article><article aria-labelledby="ariaid-title4" class="topic nested1" id="best-practices"><h2 class="title topictitle2" id="ariaid-title4">Best Practices</h2><div class="body"><p class="p">You can re-sort the sampled functions based on the total, actual, and average time spent as well as call count. Each can have value in identifying performance bottlenecks. For example, a function that has a low average time but is repeatedly called can sometimes cause performance bottlenecks. See what functions your application are spending the most time running and use that to focus your optimization efforts.</p></div></article></article></main></div>
+</body>
+</html>

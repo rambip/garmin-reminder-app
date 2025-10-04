@@ -1,68 +1,144 @@
 # Garmin Connect IQ Documentation Index
 
-This file serves as an index for key Garmin Connect IQ documentation resources.
+This document serves as a comprehensive index for the locally stored Garmin Connect IQ documentation. The documentation is organized into two main sections: API Reference and Developer Guide.
 
-## Core Topics
+## API Reference
 
-- [Manifest and Permissions](https://developer.garmin.com/connect-iq/core-topics/manifest-and-permissions/)
-- [Application and System Modules](https://developer.garmin.com/connect-iq/core-topics/application-and-system-modules/)
-- [Persisting Data](https://developer.garmin.com/connect-iq/core-topics/persisting-data/)
-- [Backgrounding](https://developer.garmin.com/connect-iq/core-topics/backgrounding/)
-- [Glances](https://developer.garmin.com/connect-iq/core-topics/glances/)
-- [Properties and App Settings](https://developer.garmin.com/connect-iq/core-topics/properties-and-app-settings/)
-- [Intents](https://developer.garmin.com/connect-iq/core-topics/intents/)
-- [Notifications](https://developer.garmin.com/connect-iq/core-topics/notifications/)
-- [Build Configuration](https://developer.garmin.com/connect-iq/core-topics/build-configuration/)
-- [Security](https://developer.garmin.com/connect-iq/core-topics/security/)
+Located in `garmin_docs/api/`, these files provide detailed information about all available Garmin Connect IQ APIs.
 
-## User Interface
+### Main Entry Points
+- [Index Page](garmin_docs/api/index.html) - Main entry point for API documentation
 
-- [Layouts](https://developer.garmin.com/connect-iq/core-topics/layouts/)
-- [Graphics](https://developer.garmin.com/connect-iq/core-topics/graphics/)
-- [Input Handling](https://developer.garmin.com/connect-iq/core-topics/input-handling/)
-- [Native Controls](https://developer.garmin.com/connect-iq/core-topics/native-controls/)
-- [Resources](https://developer.garmin.com/connect-iq/core-topics/resources/)
-- [Monkey Style](https://developer.garmin.com/connect-iq/core-topics/monkey-style/)
-- [Getting the Users Attention](https://developer.garmin.com/connect-iq/core-topics/getting-the-users-attention/)
-- [Editing Watch Faces On Device](https://developer.garmin.com/connect-iq/core-topics/editing-watch-faces-on-device/)
+### Core APIs
+- [Lang](garmin_docs/api/Lang.html) - Core language features and utilities
+- [WatchUi](garmin_docs/api/WatchUi.html) - User interface components and interactions
+- [Graphics](garmin_docs/api/Graphics.html) - Drawing and rendering capabilities
+- [System](garmin_docs/api/System.html) - System-level information and device stats
 
-## Connectivity
+### Device Interaction
+- [Activity](garmin_docs/api/Activity.html) - Activity and session tracking
+- [ActivityMonitor](garmin_docs/api/ActivityMonitor.html) - Daily activity metrics
+- [ActivityRecording](garmin_docs/api/ActivityRecording.html) - Record and manage activities
+- [UserProfile](garmin_docs/api/UserProfile.html) - User settings and information
 
-- [HTTPS](https://developer.garmin.com/connect-iq/core-topics/https/)
-- [Authenticated Web Services](https://developer.garmin.com/connect-iq/core-topics/authenticated-web-services/)
-- [Communicating with Mobile Apps](https://developer.garmin.com/connect-iq/core-topics/communicating-with-mobile-apps/)
-- [Downloading Content](https://developer.garmin.com/connect-iq/core-topics/downloading-content/)
-- [Mobile SDK for Android](https://developer.garmin.com/connect-iq/core-topics/mobile-sdk-for-android/)
-- [Mobile SDK for iOS](https://developer.garmin.com/connect-iq/core-topics/mobile-sdk-for-ios/)
+### Communication
+- [Communications](garmin_docs/api/Communications.html) - Network requests and connectivity
+- [BluetoothLowEnergy](garmin_docs/api/BluetoothLowEnergy.html) - BLE communication
+- [Ant](garmin_docs/api/Ant.html) - ANT protocol communication
+- [AntPlus](garmin_docs/api/AntPlus.html) - ANT+ device profiles
 
-## Hardware and Sensors
+### Sensors and Hardware
+- [Position](garmin_docs/api/Position.html) - Location and GPS information
+- [Sensor](garmin_docs/api/Sensor.html) - Device sensors access
+- [SensorHistory](garmin_docs/api/SensorHistory.html) - Historical sensor data
+- [SensorLogging](garmin_docs/api/SensorLogging.html) - Logging sensor data
 
-- [Ant and Ant Plus](https://developer.garmin.com/connect-iq/core-topics/ant-and-ant-plus/)
-- [Bluetooth Low Energy](https://developer.garmin.com/connect-iq/core-topics/bluetooth-low-energy/)
-- [Pairing Wireless Devices](https://developer.garmin.com/connect-iq/core-topics/pairing-wireless-devices/)
-- [Sensors](https://developer.garmin.com/connect-iq/core-topics/sensors/)
-- [Positioning](https://developer.garmin.com/connect-iq/core-topics/positioning/)
-- [Activity Recording](https://developer.garmin.com/connect-iq/core-topics/activity-recording/)
-- [Quantifying the User](https://developer.garmin.com/connect-iq/core-topics/quantifying-the-user/)
-- [Complications](https://developer.garmin.com/connect-iq/core-topics/complications/)
+### UI and Notifications
+- [Attention](garmin_docs/api/Attention.html) - Vibration, tones, and alerts
+- [Notifications](garmin_docs/api/Notifications.html) - System notifications
+- [Complications](garmin_docs/api/Complications.html) - Watch face complications
 
-## Development Tools
+### Storage and Persistence
+- [Application](garmin_docs/api/Application.html) - Application storage
+- [PersistedContent](garmin_docs/api/PersistedContent.html) - Content storage
+- [PersistedLocations](garmin_docs/api/PersistedLocations.html) - Location storage
 
-- [Shareable Libraries](https://developer.garmin.com/connect-iq/core-topics/shareable-libraries/)
-- [Debugging](https://developer.garmin.com/connect-iq/core-topics/debugging/)
-- [Unit Testing](https://developer.garmin.com/connect-iq/core-topics/unit-testing/)
-- [Exception Reporting Tool](https://developer.garmin.com/connect-iq/core-topics/exception-reporting-tool/)
-- [Profiling](https://developer.garmin.com/connect-iq/core-topics/profiling/)
+### Utilities
+- [StringUtil](garmin_docs/api/StringUtil.html) - String manipulation utilities
+- [Time](garmin_docs/api/Time.html) - Time and date utilities
+- [Timer](garmin_docs/api/Timer.html) - Timer functionality
+- [Math](garmin_docs/api/Math.html) - Mathematical functions
+- [Cryptography](garmin_docs/api/Cryptography.html) - Cryptographic operations
 
-## Publishing
+### Advanced Features
+- [Background](garmin_docs/api/Background.html) - Background processing
+- [Authentication](garmin_docs/api/Authentication.html) - User authentication
+- [FitContributor](garmin_docs/api/FitContributor.html) - FIT file data fields
+- [Media](garmin_docs/api/Media.html) - Media playback control
+- [Weather](garmin_docs/api/Weather.html) - Weather information
 
-- [Publishing to the Store](https://developer.garmin.com/connect-iq/core-topics/publishing-to-the-store/)
-- [Beta Apps](https://developer.garmin.com/connect-iq/core-topics/beta-apps/)
-- [Trial Apps](https://developer.garmin.com/connect-iq/core-topics/trial-apps/)
-- [Requesting Reviews](https://developer.garmin.com/connect-iq/core-topics/requesting-reviews/)
+### Testing
+- [Test](garmin_docs/api/Test.html) - Testing utilities
 
-## Other Resources
+## Developer Guide
 
-- [Connect IQ API Documentation](https://developer.garmin.com/connect-iq/api-docs/)
-- [Developer Forums](https://forums.garmin.com/developer/)
-- [Getting Started](https://developer.garmin.com/connect-iq/connect-iq-basics/)
+Located in `garmin_docs/guide/`, these files provide tutorials, implementation guides, and best practices for Connect IQ development.
+
+### Getting Started
+- [User Interface](garmin_docs/guide/user_interface.html) - UI development fundamentals
+- [Layouts](garmin_docs/guide/layouts.html) - Layout system usage
+- [Resources](garmin_docs/guide/resources.html) - Managing application resources
+- [Manifest and Permissions](garmin_docs/guide/manifest_and_permissions.html) - App configuration
+- [Input Handling](garmin_docs/guide/input_handling.html) - User input processing
+
+### UI Components and Design
+- [Graphics](garmin_docs/guide/graphics.html) - Graphics and drawing
+- [Native Controls](garmin_docs/guide/native_controls.html) - System UI components
+- [Glances](garmin_docs/guide/glances.html) - Glance view implementation
+
+### App Architecture
+- [Application and System Modules](garmin_docs/guide/application_and_system_modules.html) - Core modules
+- [Persisting Data](garmin_docs/guide/persisting_data.html) - Data storage approaches
+- [Properties and App Settings](garmin_docs/guide/properties_and_app_settings.html) - Configuration
+
+### Communication
+- [Communicating with Mobile Apps](garmin_docs/guide/communicating_with_mobile_apps.html) - Phone connectivity
+- [Downloading Content](garmin_docs/guide/downloading_content.html) - Network operations
+- [HTTPS](garmin_docs/guide/https.html) - Secure communication
+- [Authenticated Web Services](garmin_docs/guide/authenticated_web_services.html) - API authentication
+
+### Device Integration
+- [Sensors](garmin_docs/guide/sensors.html) - Working with device sensors
+- [Positioning](garmin_docs/guide/positioning.html) - Location services
+- [Activity Recording](garmin_docs/guide/activity_recording.html) - Recording workouts
+- [Quantifying the User](garmin_docs/guide/quantifying_the_user.html) - User metrics
+
+### Advanced Features
+- [Backgrounding](garmin_docs/guide/backgrounding.html) - Background processing
+- [Getting the User's Attention](garmin_docs/guide/getting_the_users_attention.html) - Alerts and notifications
+- [Notifications](garmin_docs/guide/notifications.html) - System notifications
+- [Intents](garmin_docs/guide/intents.html) - Inter-app communication
+- [Complications](garmin_docs/guide/complications.html) - Watch face complications
+
+### Wireless Connectivity
+- [Bluetooth Low Energy](garmin_docs/guide/bluetooth_low_energy.html) - BLE implementation
+- [ANT and ANT+](garmin_docs/guide/ant_and_ant_plus.html) - ANT protocol usage
+- [Pairing Wireless Devices](garmin_docs/guide/pairing_wireless_devices.html) - Device connectivity
+
+### Development Tools
+- [Debugging](garmin_docs/guide/debugging.html) - Debugging techniques
+- [Profiling](garmin_docs/guide/profiling.html) - Performance analysis
+- [Unit Testing](garmin_docs/guide/unit_testing.html) - Testing practices
+- [Build Configuration](garmin_docs/guide/build_configuration.html) - Build system setup
+- [Monkey Style](garmin_docs/guide/monkey_style.html) - Coding style guide
+- [Exception Reporting Tool](garmin_docs/guide/exception_reporting_tool.html) - Error handling
+
+### Mobile Companion SDKs
+- [Mobile SDK for Android](garmin_docs/guide/mobile_sdk_for_android.html) - Android companion apps
+- [Mobile SDK for iOS](garmin_docs/guide/mobile_sdk_for_ios.html) - iOS companion apps
+
+### Publishing
+- [Publishing to the Store](garmin_docs/guide/publishing_to_the_store.html) - Store submission process
+- [Beta Apps](garmin_docs/guide/beta_apps.html) - Beta testing program
+- [Trial Apps](garmin_docs/guide/trial_apps.html) - Trial version implementation
+- [Requesting Reviews](garmin_docs/guide/requesting_reviews.html) - Store review process
+
+### Advanced Development
+- [Shareable Libraries](garmin_docs/guide/shareable_libraries.html) - Code library sharing
+- [Security](garmin_docs/guide/security.html) - Security best practices
+- [Editing Watch Faces on Device](garmin_docs/guide/editing_watch_faces_on_device.html) - On-device customization
+
+## How to Use This Documentation
+
+1. Start with the Developer Guide to understand concepts
+2. Reference the API documentation for specific implementation details
+3. Follow best practices outlined in both sections
+4. Use the search functionality in your browser when viewing HTML files
+
+## Offline Access
+
+These documentation files can be accessed without an internet connection. To view them:
+
+1. Open the HTML files in any web browser
+2. Use browser navigation and search to find relevant information
+3. Reference this index to locate specific topics
