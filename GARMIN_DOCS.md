@@ -128,17 +128,22 @@ Located in `garmin_docs/guide/`, these files provide tutorials, implementation g
 - [Security](garmin_docs/guide/security.html) - Security best practices
 - [Editing Watch Faces on Device](garmin_docs/guide/editing_watch_faces_on_device.html) - On-device customization
 
-## How to Use This Documentation
+## Language Reference
 
-1. Start with the Developer Guide to understand concepts
-2. Reference the API documentation for specific implementation details
-3. Follow best practices outlined in both sections
-4. Use the search functionality in your browser when viewing HTML files
+Located in `garmin_docs/language/`, these files provide detailed information about the MonkeyC programming language.
 
-## Offline Access
+### Language Fundamentals
+- [Annotations](garmin_docs/language/annotations.html) - Class and method annotations
+- [Coding Conventions](garmin_docs/language/coding_conventions.html) - MonkeyC coding standards and practices
+- [Compiler Options](garmin_docs/language/compiler_options.html) - Configuration options for the compiler
 
-These documentation files can be accessed without an internet connection. To view them:
+### Type System
+- [Monkey Types](garmin_docs/language/monkey_types.html) - MonkeyC type system reference
+- [Containers](garmin_docs/language/containers.html) - Arrays, dictionaries and other container types
 
-1. Open the HTML files in any web browser
-2. Use browser navigation and search to find relevant information
-3. Reference this index to locate specific topics
+### Functions and Objects
+- [Functions](garmin_docs/language/functions.html) - Function declarations and usage patterns
+- [Objects and Memory](garmin_docs/language/objects_and_memory.html) - Object model and memory management
+
+### Error Handling
+- [Exceptions and Errors](garmin_docs/language/exceptions_and_errors.html) - Error handling mechanisms

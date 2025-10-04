@@ -1,67 +1,69 @@
-# Garmin App - Development Best Practices
+# Garmin Connect IQ Development Guidelines
 
-> **Important:** Please read the [ARCHITECTURE.md](ARCHITECTURE.md) document first to understand the overall application structure before diving into these development best practices.
+## Concision
 
-This document describes the Garmin Connect IQ best practices for application development, focusing on platform-specific patterns, component lifecycles, and recommended implementation approaches.
+Code should be like this file: compact, focused, with flexibility only when strictly necessary.
 
-## API Documentation
+You can propose a feature in your answer, but don't implement it if not asked.
 
-The Garmin documentation has been downloaded and is available locally in the following directories:
-- API documentation: `garmin_docs/api/` - Contains the Connect IQ API reference
-- Developer guide: `garmin_docs/guide/` - Contains implementation guides and tutorials
+## Watch for Unexpected Behavior
+MonkeyC has non-standard behavior in many areas. Don't assume it matches other languages. Always:
+- Read documentation before implementing non-trivial features
+- test any argument invariants at the start of the function, and crash the app if it does not hold.
 
-A comprehensive index of the local Garmin Connect IQ documentation is available in the [`GARMIN_DOCS.md`](GARMIN_DOCS.md) file, which organizes all the available resources by category and provides direct links to the HTML documentation files.
-
-These local docs can be accessed offline and provide comprehensive information about the Garmin Connect IQ platform, APIs, and development practices.
-
-## Build System
-
-### Build Script (build.sh)
-
-**Role**: Compiles the application for the target device.
-
-**Responsibilities**:
-- Compiles Monkey C code using monkeyc compiler
-- Sets the target device (fr165)
-- Uses the developer key for signing
-- Outputs to result.prg
-
-**Usage**:
-- Run `./build.sh` after each major code change
-- Ensures changes are properly compiled and ready for testing
-- Creates result.prg file that can be installed on the device
-
-**Running the Application**:
-- To run the compiled app on a simulator, use the command: `monkeydo result.prg fr165`
-- This launches the application on the fr165 device simulator
-- Essential for testing functionality before deploying to physical devices
-
-## Design Principles
-
-### Component Architecture
-
-**Pattern**: Use composition over inheritance for UI components.
-
-**Implementation**:
-- Do NOT subclass framework components like `WatchUi.Menu2`
-- Instead, create delegate classes that extend appropriate delegate base classes
-- Store framework components as member variables
-- Provide accessor methods to retrieve the components when needed
-
-**Example**:
 ```
-// Correct approach - using composition
+// Unexpected behavior examples:
+function surprisingResults() {
+    // Array access beyond bounds returns null, not error
+    var arr = [1, 2, 3];
+    var value = arr[10];  // Returns null, not exception
+
+    // Equality checks are case-insensitive for strings
+    var result = ("Hello" == "hello");  // Returns true!
+
+    // Array.indexOf() returns -1, not null for missing items
+    var idx = arr.indexOf(5);  // Returns -1
+
+    // Method calls on null don't always throw errors
+    var str = null;
+    var length = str.length();  // Silently returns 0
+}
+```
+
+## Architecture
+
+Read [ARCHITECTURE.md](ARCHITECTURE.md) first for overall application structure.
+
+## Documentation
+
+Local documentation is available in:
+- `garmin_docs/api/` - API reference
+- `garmin_docs/guide/` - Implementation guides
+- `garmin_docs/language/` - MonkeyC language reference
+- [`GARMIN_DOCS.md`](GARMIN_DOCS.md) - Comprehensive index
+
+## Build & Run
+
+```
+./build.sh         # Compile for fr165 device
+monkeydo result.prg fr165  # Run in simulator
+```
+
+## UI Component Patterns
+
+Use composition over inheritance for UI components:
+
+```
 class MyMenuDelegate extends WatchUi.Menu2InputDelegate {
-    hidden var _menu;  // Store as member variable
-    
+    hidden var _menu;
+
     function initialize() {
         Menu2InputDelegate.initialize();
         _menu = new WatchUi.Menu2({:title => "My Menu"});
-        // Add items, configure menu
     }
-    
+
     function getMenu() {
-        return _menu;  // Accessor method
+        return _menu;
     }
 }
 
@@ -70,114 +72,53 @@ var menuDelegate = new MyMenuDelegate();
 WatchUi.pushView(menuDelegate.getMenu(), menuDelegate, WatchUi.SLIDE_UP);
 ```
 
-## View Lifecycle Management
+## View Lifecycle
 
-### Layout and Label Handling
-
-**Process**: Views must properly manage the lifecycle of UI elements and resources.
-
-**Implementation**:
-1. **onLayout**: Set the layout for the view using `setLayout()`
-   - Only define the layout structure
-   - Do NOT directly access or manipulate UI elements
-
-2. **onShow**: Load resources and initialize UI elements
-   - Load string resources with `WatchUi.loadResource()`
-   - Get references to drawable elements with `View.findDrawableById()`
-   - Set initial values for labels and other UI elements
-   - This separation ensures resources are properly loaded before being used
-
-3. **onUpdate**: Render the view
-   - Update dynamic content if needed
-   - Call the parent `View.onUpdate(dc)` to handle rendering
-
-4. **onHide**: Clean up resources
-   - Set resource variables to null to free memory
-   - Essential for memory management on constrained devices
-
-**Example**:
 ```
 function onLayout(dc) {
     setLayout(Rez.Layouts.MyLayout(dc));
 }
 
 function onShow() {
-    // Load resources
     _titleText = WatchUi.loadResource(Rez.Strings.MyTitle);
-    
-    // Get UI elements
     _label = View.findDrawableById("myLabel");
-    
-    // Set values
     _label.setText(_titleText);
 }
 
 function onHide() {
-    // Free memory
     _titleText = null;
-    _label = null;
+    _label = null;  // Free memory
 }
 ```
 
-## Layout Implementation
+## Layout Structure
 
-### Layout XML Structure
-
-**Format**: Each layout file must follow a strict XML structure with proper nesting
-
-**Components**:
-- Each layout file must include top-level `<resources>` and nested `<layouts>` tags
-- Inside the `<layouts>` tag, individual `<layout>` elements are defined with unique IDs
-- UI elements like `<label>` are placed inside the `<layout>` element
-
-**Example**:
 ```
 <resources>
     <layouts>
         <layout id="MyLayout">
             <label id="titleLabel" x="center" y="20%" font="Graphics.FONT_MEDIUM" />
-            <!-- More UI elements -->
         </layout>
     </layouts>
 </resources>
 ```
 
-**Usage**:
-- Layout files are placed in the `resources/layouts/` directory
-- Views access layouts via `setLayout(Rez.Layouts.MyLayout(dc))` in their `onLayout` method
-- UI element references must be obtained in `onShow()` using `findDrawableById()`, not in `onUpdate()`
-- Note: A top-level `resources.xml` file is NOT needed as the compiler automatically scans the resources directory structure
+## Resource Structure
 
-### Resource Compilation
+The compiler automatically processes resources based on directory structure:
+- `resources/strings/` - String resources
+- `resources/layouts/` - Layout definitions
+- `resources/menus/` - Menu definitions
+- `resources/drawables/` - Images and bitmaps
 
-**Directory Structure**: The Garmin resource compiler automatically processes resources based on a standard directory structure:
-- `resources/` - Base resources directory
-  - `strings/` - String resources (strings.xml)
-  - `layouts/` - Layout definitions
-  - `drawables/` - Images and bitmap resources
-  - `menus/` - Menu definitions
-  - `fonts/` - Custom font resources
+Resource qualifiers for targeting specific devices/languages:
+- `resources-fr165/` - Device-specific
+- `resources-deu/` - Language-specific
+- `resources-round-218x218/` - Screen size-specific
 
-**Automatic Resource Discovery**: The compiler scans this directory structure and automatically builds the resource database. Individual resource files in these directories are detected and compiled without requiring explicit references in a central resources.xml file.
+## Menu Examples
 
-**Resource Qualifiers**: Resource folders can have qualifiers to target specific:
-- Device models (e.g., `resources-fr165/`)
-- Languages (e.g., `resources-deu/` for German)
-- Screen sizes (e.g., `resources-round-218x218/`)
-
-**Resource Access**: All properly placed resources are available through the auto-generated `Rez` module without any additional configuration.
-
-## Menu Display Implementation
-
-### MenuItem Usage
-
-The app uses WatchUi.MenuItem with the following structure:
-- Main label: Shows primary information 
-- Sub label: Shows secondary information
-- Identifier: Unique ID for handling selection events
-- Options: Controls alignment and presentation (left aligned for better readability)
-
-**Example**:
+MenuItem usage:
 ```
 _menu.addItem(new WatchUi.MenuItem(
     "Primary Text",
@@ -187,17 +128,11 @@ _menu.addItem(new WatchUi.MenuItem(
 ));
 ```
 
-## Resource-Based Menus and Symbols
-
-### Menu Resource Structure
-
-**Format**: Menu resources must use the `<menus>` root tag, not `<resources>`.
-
-**Example**:
+Menu resources:
 ```
 <menus>
     <menu2 id="MainMenu" title="@Strings.MainMenuTitle">
-        <menu-item id="add_reminder" label="@Strings.AddReminderLabel" 
+        <menu-item id="add_reminder" label="@Strings.AddReminderLabel"
                    subLabel="@Strings.AddReminderSubLabel">
             <param name="alignment">WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
         </menu-item>
@@ -205,141 +140,71 @@ _menu.addItem(new WatchUi.MenuItem(
 </menus>
 ```
 
-**Usage**:
-- Place menu XML files in `resources/menus/` directory
-- Each file can contain multiple menu definitions
-- Reference string resources with `@Strings.StringId` format
-- The `param` tag is optional for simple menus
-
-### Working with Symbols
-
-**Menu Item IDs**: Menu resource IDs are converted to symbols in Monkey C:
-- XML: `id="add_reminder"` becomes the symbol `:add_reminder` in code
-- Compare using symbol equality: `if (itemId == :add_reminder)`
-- NOT as strings: `if (itemId.equals("add_reminder"))` will fail
-
-**Using Resource-Based Menus**:
-
+Working with symbols:
 ```
 // Push a menu from resources
 WatchUi.pushView(new Rez.Menus.MainMenu(), new MainMenuDelegate(), WatchUi.SLIDE_UP);
 
 // Handle menu selection with symbols
 function onSelect(item) {
-    var itemId = item.getId();  // Returns a symbol like :add_reminder
-    if (itemId == :add_reminder) {
+    if (item.getId() == :add_reminder) {
         // Handle add reminder selection
     }
 }
 ```
 
-**Converting Symbols for Display**:
+## Storage
+
+Storage limitations:
+- `Lang.Symbol` cannot be stored directly
+- Keys and values limited to 8KB each, 128KB total app storage
+
+Symbol-to-string mapping:
 ```
-// Create a mapping of symbols to string resources
-var categoryStrings = {
-    :work => Rez.Strings.CategoryWork,
-    :family => Rez.Strings.CategoryFamily
-};
-
-// Convert symbol to display string
-if (categoryStrings.hasKey(categorySymbol)) {
-    return WatchUi.loadResource(categoryStrings[categorySymbol]);
-}
-```
-
-## Storage and Data Persistence
-
-### Supported Storage Data Types
-
-**Storage Limitations**: The `Application.Storage` module supports a specific set of data types:
-
-- **Basic Types**:
-  - `Lang.Number` - Integer values
-  - `Lang.Float` - Floating point values
-  - `Lang.Long` - 64-bit integer values
-  - `Lang.Double` - Double-precision floating point values
-  - `Lang.Char` - Single character values
-  - `Lang.String` - Text strings
-  - `Lang.Boolean` - True/false values
-
-- **Collection Types**:
-  - `Lang.Array` - Ordered collections (must contain only supported types)
-  - `Lang.Dictionary` - Key-value pairs (must contain only supported types)
-
-**Storage API Usage**:
-- Use `Storage.setValue(key, value)` to save data
-- Use `Storage.getValue(key)` to retrieve data
-- Data is saved to disk immediately when `setValue()` is called
-- Always verify retrieved values with null checks and type checking
-
-**Important Restrictions**:
-- `Lang.Symbol` cannot be stored directly in Storage
-- When storing symbols, convert them to strings first
-- When storing objects in collections, all nested objects must also be of supported types
-- Storage keys and values are limited to 8 KB each
-- A total of 128 KB of storage is available to the app
-- Storage operations may silently convert some types (like Numbers to Strings)
-- Type inconsistencies between save and retrieve are a common source of bugs
-
-**Example - Symbol to String Mapping**:
-```
-// Simple one-to-one mapping for symbols to strings
-var symbolToString = {
-    :work => "work",
-    :family => "family",
-    :friends => "friends"
-};
-
-// Store a symbol by converting to its string equivalent
+// Store a symbol by converting to string
 function storeCategory(categorySymbol) {
-    if (symbolToString.hasKey(categorySymbol)) {
-        Storage.setValue("lastCategory", symbolToString[categorySymbol]);
+    var stringMap = {:work => "work", :family => "family"};
+    if (stringMap.hasKey(categorySymbol)) {
+        Storage.setValue("lastCategory", stringMap[categorySymbol]);
     }
 }
 
-// Retrieve a string and convert back to symbol
+// Retrieve and convert back to symbol
 function retrieveCategory() {
     var categoryString = Storage.getValue("lastCategory");
-    // Simple reverse mapping lookup
     if (categoryString == "work") { return :work; }
     if (categoryString == "family") { return :family; }
-    if (categoryString == "friends") { return :friends; }
     return null;
 }
 ```
 
-### Storage Best Practices
-
-**Defensive Storage Access**:
-- Always check for null before using retrieved values
-- Maintain a simple one-to-one mapping between symbols and strings
-- Use direct conversions for data consistency
-- Keep string representations of symbols in a lookup table
-
-**Example - Simple Retrieval Pattern**:
+Defensive access:
 ```
 function getSavedReminders() {
     var reminders = Storage.getValue("reminders");
-    
-    // Simple null check is sufficient
-    if (reminders == null) {
-        return [];
-    }
-    
-    return reminders;
+    return (reminders == null) ? [] : reminders;
 }
 ```
 
-### Import Syntax and Resource Access
 
-**Import Syntax**: Use direct imports for modules, not file paths:
+## Imports
+
 ```
 import Toybox.WatchUi;
 import Toybox.Graphics;
 import Rez;  // Auto-generated module for all resources
 ```
 
-**Resource Access**: No need for a main resources.xml file:
-- Resources are discovered automatically based on directory structure
-- Access resources via the `Rez` namespace
-- Example: `Rez.Menus.MainMenu()`, `Rez.Strings.TimeUrgent`, `Rez.Layouts.DetailView(dc)`
+Custom project files (.mc) are automatically imported - no explicit import statements needed for your own code files. The compiler automatically finds and includes all .mc files in your project.
+
+```
+// Example: If you have these files:
+// - MyProject/source/MyView.mc
+// - MyProject/source/MyDelegate.mc
+
+// In MyView.mc, you can directly use classes from MyDelegate.mc:
+function initialize() {
+    // No import needed, MyCustomDelegate is automatically available
+    _delegate = new MyCustomDelegate();
+}
+```

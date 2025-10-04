@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Containers - Garmin Connect IQ Documentation</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; }
+        h1 { color: #333; }
+        pre { background-color: #f5f5f5; padding: 10px; border-radius: 4px; overflow: auto; }
+        code { font-family: monospace; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f2f2f2; }
+        img { max-width: 100%; }
+    </style>
+</head>
+<body>
+    <h1>Containers</h1>
+    <div class="c0123 c0126">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/><meta charset="utf-8"/><meta content="(C) Copyright 2025" name="copyright"/><meta content="(C) Copyright 2025" name="DC.rights.owner"/><meta content="topic" name="DC.type"/><meta content="HTML5" name="DC.format"/><meta content="containers" name="DC.identifier"/><link href="../../commonltr.css" rel="stylesheet" type="text/css"/><title>Containers</title><main role="main"><article aria-labelledby="ariaid-title1" role="article"><h1 class="title topictitle1" id="ariaid-title1">Containers</h1><div class="body"><p class="p">Monkey C has two container types built into the language: Arrays and Dictionaries.</p></div><article aria-labelledby="ariaid-title2" class="topic nested1" id="arrays"><h2 class="title topictitle2" id="ariaid-title2">Arrays</h2><div class="body"><p class="p">Arrays in Monkey C, like variables, are typeless, it is not necessary to declare a data type. There are two forms for creating a new array. To create an empty array of a fixed <code class="ph codeph">size</code>, use this:</p><pre class="pre codeblock typescript"><code>// Create a typeless array
+var untypedArray = new [size];
+// Create a typed array
+var typedArray = new Array&lt;Number&gt;[size];</code></pre><p class="p">To pre-initialize an array, this syntax can be used:</p><pre class="pre codeblock typescript"><code>// New array. Will be typed as a Tuple
+// [Number, Number, Number, Number, Number]
+var untypedArray = [1, 2, 3, 4, 5];
+// New typed array
+var typedArray = [1, 2, 3, 4, 5] as Array&lt;Number&gt;;</code></pre><p class="p">Elements are expressions, so multidimensional arrays can be created using this syntax:</p><pre class="pre codeblock typescript"><code>var array = [ [1,2], [3,4] ];</code></pre><p class="p">Monkey C does not have a direct way of creating an empty two-dimensional array, one may be initialized with this syntax:</p><pre class="pre codeblock typescript"><code>// Shout out to all the Java programmers in the house
+var array = new [first_dimension_size];
+
+// Initialize the sub-arrays
+for( var i = 0; i &lt; first_dimension_size; i += 1 ) {
+    array[i] = new [second_dimension_size];
+}</code></pre></div></article><article aria-labelledby="ariaid-title3" class="topic nested1" id="dictionaries"><h2 class="title topictitle2" id="ariaid-title3">Dictionaries</h2><div class="body"><p class="p">Dictionaries, or associative arrays, are a built-in data structure in Monkey C:</p><pre class="pre codeblock java"><code>var dict = { "a" =&gt; 1, "b" =&gt; 2 };  // Creates a dictionary
+System.println( dict["a"] );        // Prints "1"
+System.println( dict["b"] );        // Prints "2"
+System.println( dict["c"] );        // Prints "null"</code></pre><p class="p">To initialize an empty dictionary, use the following syntax:</p><pre class="pre codeblock typescript"><code>var x = {};                         // Empty dictionary</code></pre><p class="p">A type suffix can be added when creating new <a class="xref" href="https://developer.garmin.com/connect-iq/api-docs/Toybox/Lang/Dictionary.html" target="_blank">Lang.Dictionary</a> objects:</p><pre class="pre codeblock typescript"><code>var x = {} as Dictionary&lt;Symbol, String&gt;;
+// Valid
+x[:option] = "value";
+// Invalid
+x["option"] = "value";</code></pre><p class="p">By default, objects hash on their reference value. Classes should override the <code class="ph codeph">hashCode()</code> method in <code class="ph codeph">Toybox.Lang.Object</code> to change the hashing function for their type:</p><pre class="pre codeblock java"><code>class Person
+{
+    // Return a number as the hash code. Remember that the hash code must be
+    // the same for two objects that are equal.
+    // @return Hash code value
+    function hashCode() {
+        // Using the unique person id for the hash code
+        return mPersonId;
+    }
+}</code></pre><p class="p">Dictionaries automatically resize and rehash as the contents grow or shrink. This makes them extremely flexible, but it comes at a cost. Insertion and removal of the contents can cause performance problems if there is accidental or excessive resizing and rehashing. Also, because hash tables require extra space for allocation, they are not as space-efficient as either objects or arrays.</p></div></article></article></main></div>
+</body>
+</html>

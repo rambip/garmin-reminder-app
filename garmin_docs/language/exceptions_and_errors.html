@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Exceptions and Errors - Garmin Connect IQ Documentation</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; }
+        h1 { color: #333; }
+        pre { background-color: #f5f5f5; padding: 10px; border-radius: 4px; overflow: auto; }
+        code { font-family: monospace; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f2f2f2; }
+        img { max-width: 100%; }
+    </style>
+</head>
+<body>
+    <h1>Exceptions and Errors</h1>
+    <div class="c0123 c0126">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/><meta charset="utf-8"/><meta content="(C) Copyright 2025" name="copyright"/><meta content="(C) Copyright 2025" name="DC.rights.owner"/><meta content="topic" name="DC.type"/><meta content="HTML5" name="DC.format"/><meta content="exceptions-and-errors" name="DC.identifier"/><link href="../../commonltr.css" rel="stylesheet" type="text/css"/><title>Exceptions and Errors</title><main role="main"><article aria-labelledby="ariaid-title1" role="article"><h1 class="title topictitle1" id="ariaid-title1">Exceptions and Errors</h1><div class="body"><p class="p">Monkey C supports structured exception handling for non-fatal errors from which there can be recovery. The syntax should be familiar for Java and Javascript developers:</p><pre class="pre codeblock java"><code>try {
+    // Code to execute
+}
+catch( ex instanceof AnExceptionClass ) {
+    // Code to handle the throw of AnExceptionClass
+}
+catch( ex ) {
+    // Code to catch all execeptions
+}
+finally {
+    // Code to execute when
+}</code></pre><p class="p">You can use the <code class="ph codeph">throw</code> keyword to throw an exception.</p></div><article aria-labelledby="ariaid-title2" class="topic nested1" id="creating-an-exception"><h2 class="title topictitle2" id="ariaid-title2">Creating an Exception</h2><div class="body"><p class="p">If you are creating your own exception, follow these rules:</p><ul class="ul"><li class="li"><p class="p">Extend <code class="ph codeph">Toybox.Lang.Exception</code></p></li><li class="li"><p class="p">Initialize the superclass in the initializer</p></li><li class="li"><p class="p">Assign a string message to the <code class="ph codeph">mMessage</code> member variable</p></li></ul><p class="p">For example, an app specific exception can be defined as follows:</p><pre class="pre codeblock typescript"><code>class AppSpecificException extends Lang.Exception {
+    //! Constructor
+    //! @param msg Message explaining cause
+    function initialize(msg) {
+        Exception.initialize();
+        self.mMessage = msg;
+    }
+}</code></pre></div></article><article aria-labelledby="ariaid-title3" class="topic nested1" id="errors"><h2 class="title topictitle2" id="ariaid-title3">Errors</h2><div class="body"><p class="p">Because Monkey C uses dynamic typing, there are many errors for which the compiler cannot check. If the error is of high enough severity, it will raise an fatal API error and cause your app to terminate at runtime. These errors cannot be caught.</p><dl class="dl"><dt class="dt dlterm">Array Out Of Bounds</dt><dd class="dd"><pre class="pre codeblock"><code>  An attempt is being made to reference an array outside of its allocated bounds</code></pre></dd><dt class="dt dlterm">Circular Dependency</dt><dd class="dd"><p class="p">There is a loop in the dependency graph of a module or object that prevents a module or object from being constructed</p></dd><dt class="dt dlterm">Communications Error</dt><dd class="dd"><p class="p">An error has occurred in <a class="xref" href="https://en.wikipedia.org/wiki/Bluetooth_low_energy" target="_blank">Bluetooth low energy</a> communications</p></dd><dt class="dt dlterm">File Not Found</dt><dd class="dd"><p class="p">The app file could not be found, which is usually caused when trying to load a resource from the app file</p></dd><dt class="dt dlterm">Illegal Frame</dt><dd class="dd"><p class="p">The return address on the stack is corrupted</p></dd><dt class="dt dlterm">Initializer Error</dt><dd class="dd"><p class="p">An error occurred in an initializer</p></dd><dt class="dt dlterm">Invalid Value</dt><dd class="dd"><p class="p">An argument passed to a function or method is invalid</p></dd><dt class="dt dlterm">Null Reference</dt><dd class="dd"><p class="p">A value is being requested from a null value</p></dd><dt class="dt dlterm">Out of Memory</dt><dd class="dd"><p class="p">Indicates no more system memory is available for allocation</p></dd><dt class="dt dlterm">Permission Required</dt><dd class="dd"><p class="p">An attempt was made to use a restricted API without permission</p></dd><dt class="dt dlterm">Stack Underflow</dt><dd class="dd"><p class="p">The stack pointer went past the bottom of the stack memory limit</p></dd><dt class="dt dlterm">Stack Overflow</dt><dd class="dd"><p class="p">The stack pointer went past the top of the stack memory limit</p></dd><dt class="dt dlterm">Symbol Not Found</dt><dd class="dd"><p class="p">An attempt was made to access a variable or method that does not exist in the specified object or method</p></dd><dt class="dt dlterm">System Error</dt><dd class="dd"><p class="p">A generic error used by the Toybox APIs for fatal errors</p></dd><dt class="dt dlterm">Too Many Arguments</dt><dd class="dd"><p class="p">Too many arguments used by a method, which are currently limited to 10 arguments</p></dd><dt class="dt dlterm">Too Many Timers</dt><dd class="dd"><p class="p">Too many <code class="ph codeph">Timer::Timer</code> objects for the target device were started</p></dd><dt class="dt dlterm">Unexpected Type</dt><dd class="dd"><p class="p">Indicates an operation being done on a variable that is unsupported by the type; for example, trying to perform a bitwise OR on two string</p></dd><dt class="dt dlterm">Unhandled Exception</dt><dd class="dd"><p class="p">An <code class="ph codeph">Exception</code> was thrown but was not caught by an exception handler</p></dd><dt class="dt dlterm">Watchdog Tripped</dt><dd class="dd"><p class="p">A Monkey C function has executed for too long; watchdogs prevent a Monkey C program from hanging the system via an infinite loop</p></dd></dl></div></article></article></main></div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Coding Conventions - Garmin Connect IQ Documentation</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; }
+        h1 { color: #333; }
+        pre { background-color: #f5f5f5; padding: 10px; border-radius: 4px; overflow: auto; }
+        code { font-family: monospace; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f2f2f2; }
+        img { max-width: 100%; }
+    </style>
+</head>
+<body>
+    <h1>Coding Conventions</h1>
+    <div class="c0123 c0126">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/><meta charset="utf-8"/><meta content="(C) Copyright 2025" name="copyright"/><meta content="(C) Copyright 2025" name="DC.rights.owner"/><meta content="topic" name="DC.type"/><meta content="HTML5" name="DC.format"/><meta content="coding-conventions" name="DC.identifier"/><link href="../../commonltr.css" rel="stylesheet" type="text/css"/><title>Coding Conventions</title><main role="main"><article aria-labelledby="ariaid-title1" role="article"><h1 class="title topictitle1" id="ariaid-title1">Coding Conventions</h1><div class="body"><p class="p">Here are guidelines for Monkey C code:</p></div><article aria-labelledby="ariaid-title2" class="topic nested1" id="naming"><h2 class="title topictitle2" id="ariaid-title2">Naming</h2><div class="body"><ul class="ul"><li class="li"><p class="p">Modules and Classes are camel-cased with the first letter in upper case.</p></li><li class="li"><p class="p">Functions are camel-cased with the first letter always being lower case.</p></li><li class="li"><p class="p">Private class member variables are camel cased with the first character being an underscore (_) and then the first letter lower case.</p></li><li class="li"><p class="p">Public class member variables are camel cased with the first letter lower case.</p></li><li class="li"><p class="p">Module variables should be camel cased with a lower cased first letter</p></li><li class="li"><p class="p">Enums must have a common prefix, e.g. <em class="ph i">COLOR_RED</em>, <em class="ph i">COLOR_BLUE</em>.</p></li><li class="li"><p class="p">In POMO (Plain Old Monkey C Objects) it is okay to have all public members.</p></li></ul></div></article><article aria-labelledby="ariaid-title3" class="topic nested1" id="source"><h2 class="title topictitle2" id="ariaid-title3">Source</h2><div class="body"><ul class="ul"><li class="li"><p class="p">Put one class per Monkey C source file.</p></li><li class="li"><p class="p">Monkey C code should use spaces aligned four spaces per indent level. The Monkey C editor will automatically convert spaces to tabs and remove trailing white space.</p></li><li class="li"><p class="p">When defining modules, classes, functions, and enums, put the opening brace on the same line as the definition and the closing brace aligned with the first character as the definition.</p></li></ul></div></article><article aria-labelledby="ariaid-title4" class="topic nested1" id="definitions"><h2 class="title topictitle2" id="ariaid-title4">Definitions</h2><div class="body"><ul class="ul"><li class="li"><p class="p">Avoid pure global variables when possible.</p></li><li class="li"><p class="p">Because modules are not purely lexical and have runtime memory cost, putting class definitions into the global module is acceptable.</p></li><li class="li"><p class="p">Avoid having public static members in class definitions; instead move those definitions into the parent module.</p></li><li class="li"><p class="p">In the first line of your class initialize function, always call the superclass initialize.</p></li></ul></div></article><article aria-labelledby="ariaid-title5" class="topic nested1" id="sample"><h2 class="title topictitle2" id="ariaid-title5">Sample</h2><div class="body"><p class="p">Here is a sample:</p><pre class="pre codeblock C++"><code>class SampleName extends Toybox.Application.AppBase
+{
+    public var publicVar;
+    private var _privateVar;
+
+    function initialize() {
+        AppBase.initialize();
+    }
+    // onStart() is called on application start up
+    function onStart(state) {
+    }
+
+    // onStop() is called when your application is exiting
+    function onStop(state) {
+    }
+
+    // Return the initial view of your application here
+    function getInitialView(){
+        return [new SampleNameView(), new SampleNameDelegate()];
+    }
+ }</code></pre></div></article></article></main></div>
+</body>
+</html>
