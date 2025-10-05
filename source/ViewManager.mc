@@ -5,6 +5,8 @@ using Toybox.Lang;
 // Use the utility functions from StringUtils
 
 class CategoryMenuDelegate extends WatchUi.Menu2InputDelegate {
+    hidden var _flowCompleted = false;
+
     function initialize() {
         Menu2InputDelegate.initialize();
         log("CategoryMenuDelegate initialized");
@@ -12,14 +14,24 @@ class CategoryMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     // When a category is selected
     function onSelect(item) {
-        var category = item.getId();
-        log("CategoryMenuDelegate.onSelect called with category: " + category);
+        var categorySymbol = item.getId();
+        log("CategoryMenuDelegate.onSelect called with category: " + categorySymbol);
 
-        // Show the time scope menu
-        var timeDelegate = new TimeMenuDelegate(category);
+        // Convert symbol to string immediately - pass strings through entire chain
+        var categoryStr = getCategoryString(categorySymbol);
+
+        // Show the time scope menu, passing completion callback
+        var timeDelegate = new TimeMenuDelegate(categoryStr, method(:onFlowComplete));
         log("About to push time menu view");
         WatchUi.pushView(new Rez.Menus.TimeMenu(), timeDelegate, WatchUi.SLIDE_LEFT);
         log("Time menu view pushed");
+    }
+
+    function onFlowComplete() {
+        log("CategoryMenuDelegate: Flow completed, popping immediately");
+        _flowCompleted = true;
+        WatchUi.popView(WatchUi.SLIDE_DOWN);
+        log("Category view popped via callback");
     }
 
     function onBack() {
@@ -32,24 +44,40 @@ class CategoryMenuDelegate extends WatchUi.Menu2InputDelegate {
 
 class TimeMenuDelegate extends WatchUi.Menu2InputDelegate {
     hidden var _category;
+    hidden var _completionCallback;
+    hidden var _flowCompleted = false;
 
-    function initialize(category) {
+    function initialize(category, completionCallback) {
         Menu2InputDelegate.initialize();
         _category = category;
+        _completionCallback = completionCallback;
         log("TimeMenuDelegate initialized with category: " + category);
     }
 
 
 
     function onSelect(item) {
-        var timeScope = item.getId();
-        log("TimeMenuDelegate.onSelect called with timeScope: " + timeScope);
+        var timeScopeSymbol = item.getId();
+        log("TimeMenuDelegate.onSelect called with timeScope: " + timeScopeSymbol);
+
+        // Convert symbol to string immediately
+        var timeScopeStr = getTimeScopeString(timeScopeSymbol);
 
         log("Creating LetterGroupMenuDelegate");
-        var letterGroupDelegate = new LetterGroupMenuDelegate(_category, timeScope);
+        var letterGroupDelegate = new LetterGroupMenuDelegate(_category, timeScopeStr, method(:onFlowComplete));
         log("About to push letter group menu view");
         WatchUi.pushView(letterGroupDelegate.getMenu(), letterGroupDelegate, WatchUi.SLIDE_LEFT);
         log("Letter group menu view pushed");
+    }
+
+    function onFlowComplete() {
+        log("TimeMenuDelegate: Flow completed, popping immediately and notifying parent");
+        _flowCompleted = true;
+        WatchUi.popView(WatchUi.SLIDE_RIGHT);
+        if (_completionCallback != null) {
+            _completionCallback.invoke();
+        }
+        log("Time scope view popped via callback");
     }
 
     function onBack() {
@@ -64,11 +92,14 @@ class LetterGroupMenuDelegate extends WatchUi.Menu2InputDelegate {
     hidden var _category;
     hidden var _timeScope;
     hidden var _menu;
+    hidden var _completionCallback;
+    hidden var _flowCompleted = false;
 
-    function initialize(category, timeScope) {
+    function initialize(category, timeScope, completionCallback) {
         Menu2InputDelegate.initialize();
         _category = category;
         _timeScope = timeScope;
+        _completionCallback = completionCallback;
         log("LetterGroupMenuDelegate initialized with category: " + category + ", timeScope: " + timeScope);
 
         // Create the menu
@@ -108,10 +139,20 @@ class LetterGroupMenuDelegate extends WatchUi.Menu2InputDelegate {
         log("LetterGroupMenuDelegate.onSelect called with groupId: " + groupId);
 
         log("Creating LetterMenuDelegate");
-        var letterDelegate = new LetterMenuDelegate(_category, _timeScope, groupId);
+        var letterDelegate = new LetterMenuDelegate(_category, _timeScope, groupId, method(:onFlowComplete));
         log("About to push letter menu view");
         WatchUi.pushView(letterDelegate.getMenu(), letterDelegate, WatchUi.SLIDE_LEFT);
         log("Letter menu view pushed");
+    }
+
+    function onFlowComplete() {
+        log("LetterGroupMenuDelegate: Flow completed, popping immediately and notifying parent");
+        _flowCompleted = true;
+        WatchUi.popView(WatchUi.SLIDE_RIGHT);
+        if (_completionCallback != null) {
+            _completionCallback.invoke();
+        }
+        log("Letter group view popped via callback");
     }
 
     function onBack() {
@@ -127,12 +168,15 @@ class LetterMenuDelegate extends WatchUi.Menu2InputDelegate {
     hidden var _timeScope;
     hidden var _menu;
     hidden var _groupId;
+    hidden var _completionCallback;
+    hidden var _flowCompleted = false;
 
-    function initialize(category, timeScope, groupId) {
+    function initialize(category, timeScope, groupId, completionCallback) {
         Menu2InputDelegate.initialize();
         _category = category;
         _timeScope = timeScope;
         _groupId = groupId;
+        _completionCallback = completionCallback;
         log("LetterMenuDelegate initialized with category: " + category + ", timeScope: " + timeScope + ", groupId: " + groupId);
 
         // Create the menu
@@ -170,13 +214,14 @@ class LetterMenuDelegate extends WatchUi.Menu2InputDelegate {
         var letter = item.getId();
         log("LetterMenuDelegate.onSelect called with letter: " + letter);
 
+        // _category and _timeScope are already strings, no conversion needed
         log("Adding reminder with category: " + _category + ", timeScope: " + _timeScope + ", letter: " + letter);
         addReminder(_category, _timeScope, letter);
         log("Reminder added successfully");
 
         log("Creating ReminderAddedView");
         var reminderAddedView = new ReminderAddedView(_category, _timeScope, letter);
-        var reminderAddedDelegate = new ReminderAddedDelegate();
+        var reminderAddedDelegate = new ReminderAddedDelegate(method(:onFlowComplete));
         log("About to push reminder added view");
         WatchUi.pushView(
             reminderAddedView,
@@ -184,6 +229,16 @@ class LetterMenuDelegate extends WatchUi.Menu2InputDelegate {
             WatchUi.SLIDE_LEFT
         );
         log("Reminder added view pushed");
+    }
+
+    function onFlowComplete() {
+        log("LetterMenuDelegate: Flow completed, popping immediately and notifying parent");
+        _flowCompleted = true;
+        WatchUi.popView(WatchUi.SLIDE_RIGHT);
+        if (_completionCallback != null) {
+            _completionCallback.invoke();
+        }
+        log("Letter view popped via callback");
     }
 
     function onBack() {
@@ -227,16 +282,12 @@ class ReminderAddedView extends WatchUi.View {
         _categoryLabel = View.findDrawableById("category") as WatchUi.Text;
         _timeScopeLabel = View.findDrawableById("timeScope") as WatchUi.Text;
 
-        // Set the dynamic text content
+        // Set the dynamic text content (_category and _timeScope are already strings)
         if (_categoryLabel != null) {
-            // Get the display string for the category (handles both symbols and strings)
-            var categoryStr = getCategoryString(_category);
-            _categoryLabel.setText(categoryStr + " [" + _letter + "]");
+            _categoryLabel.setText(_category + " [" + _letter + "]");
         }
         if (_timeScopeLabel != null) {
-            // Get the display string for the time scope (handles both symbols and strings)
-            var timeScopeStr = getTimeScopeString(_timeScope);
-            _timeScopeLabel.setText(timeScopeStr);
+            _timeScopeLabel.setText(_timeScope);
         }
 
         // Let the layout handle the rendering
@@ -252,8 +303,11 @@ class ReminderAddedView extends WatchUi.View {
 }
 
 class ReminderAddedDelegate extends WatchUi.BehaviorDelegate {
-    function initialize() {
+    hidden var _completionCallback;
+
+    function initialize(completionCallback) {
         BehaviorDelegate.initialize();
+        _completionCallback = completionCallback;
         log("ReminderAddedDelegate initialized");
     }
 
@@ -271,13 +325,14 @@ class ReminderAddedDelegate extends WatchUi.BehaviorDelegate {
     }
 
     function returnToMainMenu() {
-        log("ReminderAddedDelegate.onBack called - returning to main menu");
-        // Return all the way to the main menu
+        log("ReminderAddedDelegate: User wants to exit, notifying all parents via callback chain");
+        // Pop just this view, then trigger the callback chain
         WatchUi.popView(WatchUi.SLIDE_DOWN);
-        WatchUi.popView(WatchUi.SLIDE_DOWN);
-        WatchUi.popView(WatchUi.SLIDE_DOWN);
-        WatchUi.popView(WatchUi.SLIDE_DOWN);
-        WatchUi.popView(WatchUi.SLIDE_DOWN);
-        log("All views popped, should be back at main menu now");
+
+        // Notify parent that flow is complete - this will cascade up through all delegates
+        if (_completionCallback != null) {
+            _completionCallback.invoke();
+        }
+        log("Callback chain initiated, each parent should pop itself");
     }
 }

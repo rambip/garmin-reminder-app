@@ -132,17 +132,21 @@ Working with symbols:
 // Push a menu from resources
 WatchUi.pushView(new Rez.Menus.MainMenu(), new MainMenuDelegate(), WatchUi.SLIDE_UP);
 
-// Handle menu selection with symbols
+// Convert symbols to strings immediately in onSelect
 function onSelect(item) {
-    if (item.getId() == :add_reminder) {
-        // Convert symbol to string immediately in onSelect
-        var categoryStr = getCategoryString(:work);
-        // Store and pass display strings only
-    }
+    var categorySymbol = item.getId();  // Symbol like :work
+    var categoryStr = getCategoryString(categorySymbol);  // "Work"
+    var delegate = new ChildDelegate(categoryStr);  // Pass string
+}
+
+// Simple symbol-to-string converter
+function getCategoryString(categorySymbol) {
+    var map = {:work => Rez.Strings.CategoryWork, :friends => Rez.Strings.CategoryFriends};
+    return map.hasKey(categorySymbol) ? WatchUi.loadResource(map[categorySymbol]) : categorySymbol.toString();
 }
 ```
 
-Symbol-to-string: Convert in onSelect, store display strings, no conversion needed when reading.
+Symbol-to-string: Use simple map with symbol keys. Convert ONCE at source, pass strings everywhere.
 
 ## Storage
 
@@ -191,3 +195,27 @@ function initialize() {
     _delegate = new MyCustomDelegate();
 }
 ```
+
+## Parent-Child Navigation Callbacks
+
+Avoid hardcoded multiple pops. Use callbacks so each view only knows its immediate parent.
+
+```
+// Parent creates callback and passes to child
+var child = new ChildDelegate(method(:onComplete));
+WatchUi.pushView(childView, child, WatchUi.SLIDE_LEFT);
+
+function onComplete() {
+    WatchUi.popView(WatchUi.SLIDE_LEFT);  // Pop myself
+    if (_parentCallback != null) { _parentCallback.invoke(); }  // Notify my parent
+}
+
+// Child stores callback and invokes when done
+class ChildDelegate {
+    hidden var _callback;
+    function initialize(callback) { _callback = callback; }
+    function onDone() { WatchUi.popView(WatchUi.SLIDE_LEFT); _callback.invoke(); }
+}
+```
+
+Child pops itself, calls callback. Parent pops itself, calls its parent. Chain collapses automatically.

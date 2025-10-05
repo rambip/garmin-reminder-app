@@ -12,41 +12,22 @@ import Rez;
 // Constants
 const STORAGE_KEY_REMINDERS = "reminders";
 
-// Helper function to get a category string from a category symbol or string
-function getCategoryString(category) {
-    // Define category string resources
+// Helper function to get a category string from a category symbol
+function getCategoryString(categorySymbol) {
     var categoryStrings = {
-        ":work" => Rez.Strings.CategoryWork,
-        ":friends" => Rez.Strings.CategoryFriends,
-        ":family" => Rez.Strings.CategoryFamily,
-        ":message" => Rez.Strings.CategoryMessage,
-        ":administrative" => Rez.Strings.CategoryAdministrative,
-        ":domestic" => Rez.Strings.CategoryDomestic
+        :work => Rez.Strings.CategoryWork,
+        :friends => Rez.Strings.CategoryFriends,
+        :family => Rez.Strings.CategoryFamily,
+        :message => Rez.Strings.CategoryMessage,
+        :administrative => Rez.Strings.CategoryAdministrative,
+        :domestic => Rez.Strings.CategoryDomestic
     };
 
-    // Handle Symbol objects
-    if (category instanceof Symbol) {
-        var key = category.toString();
-        if (categoryStrings.hasKey(key)) {
-            return WatchUi.loadResource(categoryStrings[key]);
-        }
-        // Fallback: convert symbol to string by removing the colon
-        return key.substring(1, null);
+    if (categoryStrings.hasKey(categorySymbol)) {
+        return WatchUi.loadResource(categoryStrings[categorySymbol]);
     }
-
-    // Handle strings (stored in Storage)
-    if (category instanceof String) {
-        if (categoryStrings.hasKey(category)) {
-            return WatchUi.loadResource(categoryStrings[category]);
-        }
-        // If it's a string that starts with a colon (stored symbol)
-        if (category.substring(0, 1).equals(":")) {
-            return category.substring(1, null);
-        }
-    }
-
-    // Default fallback
-    return category;
+    // Fallback: convert symbol to string by removing the colon
+    return categorySymbol.toString().substring(1, null);
 }
 
 // Helper function to get a time scope string from a time scope symbol

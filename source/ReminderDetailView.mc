@@ -92,10 +92,12 @@ class ReminderDetailView extends WatchUi.View {
 // Delegate to handle user interactions with the reminder detail view
 class ReminderDetailDelegate extends WatchUi.BehaviorDelegate {
     hidden var _reminderIndex;
+    hidden var _deletionCallback;
 
-    function initialize(reminderIndex) {
+    function initialize(reminderIndex, deletionCallback) {
         BehaviorDelegate.initialize();
         _reminderIndex = reminderIndex;
+        _deletionCallback = deletionCallback;
         log("ReminderDetailDelegate initialized with index: " + reminderIndex);
     }
 
@@ -111,7 +113,7 @@ class ReminderDetailDelegate extends WatchUi.BehaviorDelegate {
     function onMenu() {
         log("onMenu called - trying to delete");
         log("Menu button pressed, calling deleteReminder");
-        deleteReminder(_reminderIndex);
+        deleteReminder(_reminderIndex, _deletionCallback);
         log("Returned from deleteReminder after menu button");
         return true;
     }
@@ -120,7 +122,7 @@ class ReminderDetailDelegate extends WatchUi.BehaviorDelegate {
     function onSelect() {
         log("onSelect called - trying to delete");
         log("Select button pressed, calling deleteReminder");
-        deleteReminder(_reminderIndex);
+        deleteReminder(_reminderIndex, _deletionCallback);
         log("Returned from deleteReminder after select button");
         return true;
     }
@@ -129,7 +131,7 @@ class ReminderDetailDelegate extends WatchUi.BehaviorDelegate {
     function onStart() {
         log("onStart called - trying to delete");
         log("Start button pressed, calling deleteReminder");
-        deleteReminder(_reminderIndex);
+        deleteReminder(_reminderIndex, _deletionCallback);
         log("Returned from deleteReminder after start button");
         return true;
     }
@@ -147,7 +149,7 @@ class ReminderDetailDelegate extends WatchUi.BehaviorDelegate {
         if (key == WatchUi.KEY_ENTER || key == WatchUi.KEY_START) {
             log("START/ENTER button pressed - deleting reminder index: " + _reminderIndex);
             // Delete the reminder directly without confirmation
-            deleteReminder(_reminderIndex);
+            deleteReminder(_reminderIndex, _deletionCallback);
             return true;
         } else {
             log("Unhandled key: " + key);
@@ -158,7 +160,7 @@ class ReminderDetailDelegate extends WatchUi.BehaviorDelegate {
 }
 
 // Helper function to delete a reminder
-function deleteReminder(reminderIndex) {
+function deleteReminder(reminderIndex, deletionCallback) {
     log("=== BEGIN DELETION PROCESS ===");
     log("Attempting to delete reminder at index: " + reminderIndex);
 
@@ -203,13 +205,15 @@ function deleteReminder(reminderIndex) {
         log("ERROR: Invalid reminder index - out of range");
     }
 
-    // NAVIGATION DEBUG - Before popping views
-    log("Current view stack before pop operations");
+    // Pop just the detail view and notify parent via callback
     log("About to pop detail view");
     WatchUi.popView(WatchUi.SLIDE_RIGHT); // Pop detail view
     log("Detail view popped successfully");
-    log("About to pop reminder menu view");
-    WatchUi.popView(WatchUi.SLIDE_RIGHT); // Pop reminder menu view
-    log("Both views popped, should be at main menu now");
+
+    // Notify parent that deletion occurred
+    if (deletionCallback != null) {
+        log("Notifying parent via deletion callback");
+        deletionCallback.invoke();
+    }
     log("=== END DELETION PROCESS ===");
 }

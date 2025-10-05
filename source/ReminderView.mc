@@ -91,8 +91,17 @@ class MainMenuDelegate extends WatchUi.Menu2InputDelegate {
 
 // Menu delegate to handle reminders menu interactions
 class ReminderMenuDelegate extends WatchUi.Menu2InputDelegate {
+    hidden var _deletionOccurred = false;
+
     function initialize() {
         Menu2InputDelegate.initialize();
+    }
+
+    function onDeletionComplete() {
+        log("ReminderMenuDelegate: Deletion occurred, popping immediately");
+        _deletionOccurred = true;
+        WatchUi.popView(WatchUi.SLIDE_DOWN);
+        log("Reminder menu view popped via callback");
     }
 
     function onSelect(item) {
@@ -108,10 +117,10 @@ class ReminderMenuDelegate extends WatchUi.Menu2InputDelegate {
             log("Selected reminder index: " + index);
             log("Preparing to show detail view for reminder: " + index);
 
-            // Open the detail view for this reminder
+            // Open the detail view for this reminder, passing deletion callback
             log("Creating ReminderDetailView for index: " + index);
             var detailView = new ReminderDetailView(index);
-            var detailDelegate = new ReminderDetailDelegate(index);
+            var detailDelegate = new ReminderDetailDelegate(index, method(:onDeletionComplete));
             log("About to push detail view to stack");
             WatchUi.pushView(detailView, detailDelegate, WatchUi.SLIDE_LEFT);
             log("Pushed ReminderDetailView");
