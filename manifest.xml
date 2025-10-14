@@ -2,6 +2,7 @@
     <iq:application entry="Main" id="E3AC86BD5B7E43E084EC757A4F311A7C" launcherIcon="@Drawables.LauncherIcon" minSdkVersion="1.3.1" name="@Strings.AppName" type="widget">
         <iq:products>
             <iq:product id="fr165"/>
+            <iq:product id="fr245"/>
         </iq:products>
         <iq:permissions>
             <iq:uses-permission id="Communications"/>
