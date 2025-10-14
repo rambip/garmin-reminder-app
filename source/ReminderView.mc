@@ -82,6 +82,7 @@ class MainMenuDelegate extends WatchUi.Menu2InputDelegate {
     function onBack() {
         log("MainMenuDelegate.onBack called - exiting app");
         // Exit the app
+        WatchUi.popView(WatchUi.SLIDE_DOWN);
         System.exit();
     }
 }
