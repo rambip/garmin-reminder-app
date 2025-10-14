@@ -26,8 +26,7 @@ function getCategoryString(categorySymbol) {
     if (categoryStrings.hasKey(categorySymbol)) {
         return WatchUi.loadResource(categoryStrings[categorySymbol]);
     }
-    // Fallback: convert symbol to string by removing the colon
-    return categorySymbol.toString().substring(1, null);
+    System.error("unexpected symbol");
 }
 
 // Helper function to get a time scope string from a time scope symbol
@@ -43,7 +42,7 @@ function getTimeScopeString(timeScopeSymbol) {
         return WatchUi.loadResource(timeScopeStrings[timeScopeSymbol]);
     }
     // Fallback: convert symbol to string by removing the colon
-    return timeScopeSymbol.toString().substring(1, null);
+    System.error("unexpected symbol");
 }
 
 // Get all reminders
@@ -125,7 +124,3 @@ class Main extends Application.AppBase {
         return [new MinimalView()];
     }
 }
-
-// The MinimalView class is in GlanceView.mc
-
-// The app now uses a menu-based interface with MainMenu as the entry point
