@@ -21,13 +21,15 @@
     <string id="CategoryWork">Work</string>
     <string id="CategoryFriends">Friends</string>
     <string id="CategoryFamily">Family</string>
-    <string id="CategoryMessage">Message</string>
     <string id="CategoryAdministrative">Administrative</string>
     <string id="CategoryDomestic">Domestic</string>
+    <string id="CategoryTransport">Transport</string>
+    <string id="CategoryHobbies">Hobbies</string>
 
     <!-- Time Menu -->
     <string id="TimeMenuTitle">Select Time</string>
     <string id="TimeUrgent">Urgent</string>
     <string id="TimeToday">Today</string>
+    <string id="TimeWeek">This Week</string>
     <string id="TimeLater">Later</string>
 </strings>

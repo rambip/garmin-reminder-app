@@ -18,9 +18,10 @@ function getCategoryString(categorySymbol) {
         :work => Rez.Strings.CategoryWork,
         :friends => Rez.Strings.CategoryFriends,
         :family => Rez.Strings.CategoryFamily,
-        :message => Rez.Strings.CategoryMessage,
+        :domestic => Rez.Strings.CategoryDomestic,
         :administrative => Rez.Strings.CategoryAdministrative,
-        :domestic => Rez.Strings.CategoryDomestic
+        :transport => Rez.Strings.CategoryTransport,
+        :hobbies => Rez.Strings.CategoryHobbies,
     };
 
     if (categoryStrings.hasKey(categorySymbol)) {
@@ -35,6 +36,7 @@ function getTimeScopeString(timeScopeSymbol) {
     var timeScopeStrings = {
         :urgent => Rez.Strings.TimeUrgent,
         :today => Rez.Strings.TimeToday,
+        :week => Rez.Strings.TimeWeek,
         :later => Rez.Strings.TimeLater
     };
 

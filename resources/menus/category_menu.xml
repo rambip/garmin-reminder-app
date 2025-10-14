@@ -15,17 +15,22 @@
                 name="alignment"
             >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
         </menu-item>
-        <menu-item id="message" label="@Strings.CategoryMessage">
-            <param
-                name="alignment"
-            >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
-        </menu-item>
         <menu-item id="administrative" label="@Strings.CategoryAdministrative">
             <param
                 name="alignment"
             >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
         </menu-item>
         <menu-item id="domestic" label="@Strings.CategoryDomestic">
+            <param
+                name="alignment"
+            >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
+        </menu-item>
+        <menu-item id="transport" label="@Strings.CategoryTransport">
+            <param
+                name="alignment"
+            >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
+        </menu-item>
+        <menu-item id="hobbies" label="@Strings.CategoryHobbies">
             <param
                 name="alignment"
             >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>

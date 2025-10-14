@@ -10,6 +10,11 @@
                 name="alignment"
             >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
         </menu-item>
+        <menu-item id="week" label="@Strings.TimeWeek">
+            <param
+                name="alignment"
+            >WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT</param>
+        </menu-item>
         <menu-item id="later" label="@Strings.TimeLater">
             <param
                 name="alignment"
