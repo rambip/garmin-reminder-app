@@ -2,16 +2,46 @@
 <layouts>
 <layout id="ReminderDetailLayout">
     <!-- Title in the header -->
-    <label id="title" x="center" y="25" color="Graphics.COLOR_BLACK" font="Graphics.FONT_MEDIUM" justification="Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER" text="@Strings.DetailViewTitle" />
+    <label
+                id="title"
+                x="center"
+                y="25"
+                color="Graphics.COLOR_BLACK"
+                font="Graphics.FONT_MEDIUM"
+                justification="Graphics.TEXT_JUSTIFY_CENTER|Graphics.TEXT_JUSTIFY_VCENTER"
+                text="@Strings.DetailViewTitle"
+            />
 
     <!-- Category and letter code -->
-    <label id="categoryLabel" x="center" y="80" color="Graphics.COLOR_WHITE" font="Graphics.FONT_MEDIUM" justification="Graphics.TEXT_JUSTIFY_CENTER" />
+    <label
+                id="categoryLabel"
+                x="center"
+                y="80"
+                color="Graphics.COLOR_WHITE"
+                font="Graphics.FONT_MEDIUM"
+                justification="Graphics.TEXT_JUSTIFY_CENTER"
+            />
 
     <!-- Time scope -->
-    <label id="timeScopeLabel" x="center" y="120" color="Graphics.COLOR_LT_GRAY" font="Graphics.FONT_MEDIUM" justification="Graphics.TEXT_JUSTIFY_CENTER" />
+    <label
+                id="timeScopeLabel"
+                x="center"
+                y="120"
+                color="Graphics.COLOR_LT_GRAY"
+                font="Graphics.FONT_MEDIUM"
+                justification="Graphics.TEXT_JUSTIFY_CENTER"
+            />
 
     <!-- Instructions -->
-    <label id="instructionsLabel" x="center" y="70%" color="Graphics.COLOR_DK_GRAY" font="Graphics.FONT_XTINY" justification="Graphics.TEXT_JUSTIFY_CENTER" text="START: Delete • BACK: Return" />
+    <label
+                id="instructionsLabel"
+                x="center"
+                y="70%"
+                color="Graphics.COLOR_DK_GRAY"
+                font="Graphics.FONT_XTINY"
+                justification="Graphics.TEXT_JUSTIFY_CENTER"
+                text="START: Delete • BACK: Return"
+            />
 </layout>
 </layouts>
 </resources>
