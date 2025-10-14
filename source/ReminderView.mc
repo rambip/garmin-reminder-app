@@ -83,7 +83,6 @@ class MainMenuDelegate extends WatchUi.Menu2InputDelegate {
         log("MainMenuDelegate.onBack called - exiting app");
         // Exit the app
         System.exit();
-        return true;
     }
 }
 
