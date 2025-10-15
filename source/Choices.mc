@@ -40,6 +40,13 @@ class ChoiceMenuDelegate extends WatchUi.Menu2InputDelegate {
     hidden var _partialReminder;
     hidden var _selectedGroup;
 
+    // Arrays for letter groups to improve readability
+    hidden var _group1Letters = ["A", "B", "C", "D", "E"];
+    hidden var _group2Letters = ["F", "G", "H", "I", "J"];
+    hidden var _group3Letters = ["K", "L", "M", "N", "O"];
+    hidden var _group4Letters = ["P", "Q", "R", "S", "T"];
+    hidden var _group5Letters = ["U", "V", "W", "X", "Y", "Z"];
+
     function initialize() {
         _partialReminder = new PartialReminder();
     }
@@ -94,7 +101,7 @@ class ChoiceMenuDelegate extends WatchUi.Menu2InputDelegate {
             // Use Rez.Menus.TimeMenu for time selection
             menu = new Rez.Menus.TimeMenu();
         } else if (step == 2) {
-            // Letter group menu with all letters in alphabetical order across 4 categories
+            // Letter group menu with all letters in alphabetical order across 5 categories
             menu = new WatchUi.Menu2({:title => WatchUi.loadResource(Rez.Strings.CategoryMenuTitle)});
 
             // Group 1: A, B, C, D, E
@@ -142,171 +149,60 @@ class ChoiceMenuDelegate extends WatchUi.Menu2InputDelegate {
 
             // Get the selected group to determine which letters to show
             if (_selectedGroup == :group1) {
-                // A, B, C, D, E
-                menu.addItem(new WatchUi.MenuItem(
-                    "A",
-                    null,
-                    "A",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "B",
-                    null,
-                    "B",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "C",
-                    null,
-                    "C",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "D",
-                    null,
-                    "D",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "E",
-                    null,
-                    "E",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
+                // Loop through group 1 letters using classic for loop
+                for (var i = 0; i < _group1Letters.size(); i++) {
+                    var letter = _group1Letters[i];
+                    menu.addItem(new WatchUi.MenuItem(
+                        letter,
+                        null,
+                        letter,
+                        {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
+                    ));
+                }
             } else if (_selectedGroup == :group2) {
-                // F, G, H, I, J
-                menu.addItem(new WatchUi.MenuItem(
-                    "F",
-                    null,
-                    "F",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "G",
-                    null,
-                    "G",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "H",
-                    null,
-                    "H",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "I",
-                    null,
-                    "I",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "J",
-                    null,
-                    "J",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
+                // Loop through group 2 letters using classic for loop
+                for (var i = 0; i < _group2Letters.size(); i++) {
+                    var letter = _group2Letters[i];
+                    menu.addItem(new WatchUi.MenuItem(
+                        letter,
+                        null,
+                        letter,
+                        {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
+                    ));
+                }
             } else if (_selectedGroup == :group3) {
-                // K, L, M, N, O
-                menu.addItem(new WatchUi.MenuItem(
-                    "K",
-                    null,
-                    "K",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "L",
-                    null,
-                    "L",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "M",
-                    null,
-                    "M",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "N",
-                    null,
-                    "N",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "O",
-                    null,
-                    "O",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
+                // Loop through group 3 letters using classic for loop
+                for (var i = 0; i < _group3Letters.size(); i++) {
+                    var letter = _group3Letters[i];
+                    menu.addItem(new WatchUi.MenuItem(
+                        letter,
+                        null,
+                        letter,
+                        {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
+                    ));
+                }
             } else if (_selectedGroup == :group4) {
-                // P, Q, R, S, T
-                menu.addItem(new WatchUi.MenuItem(
-                    "P",
-                    null,
-                    "P",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "Q",
-                    null,
-                    "Q",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "R",
-                    null,
-                    "R",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "S",
-                    null,
-                    "S",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "T",
-                    null,
-                    "T",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
+                // Loop through group 4 letters using classic for loop
+                for (var i = 0; i < _group4Letters.size(); i++) {
+                    var letter = _group4Letters[i];
+                    menu.addItem(new WatchUi.MenuItem(
+                        letter,
+                        null,
+                        letter,
+                        {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
+                    ));
+                }
             } else if (_selectedGroup == :group5) {
-                // U, V, W, X, Y, Z
-                menu.addItem(new WatchUi.MenuItem(
-                    "U",
-                    null,
-                    "U",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "V",
-                    null,
-                    "V",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "W",
-                    null,
-                    "W",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "X",
-                    null,
-                    "X",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "Y",
-                    null,
-                    "Y",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
-                menu.addItem(new WatchUi.MenuItem(
-                    "Z",
-                    null,
-                    "Z",
-                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
-                ));
+                // Loop through group 5 letters using classic for loop
+                for (var i = 0; i < _group5Letters.size(); i++) {
+                    var letter = _group5Letters[i];
+                    menu.addItem(new WatchUi.MenuItem(
+                        letter,
+                        null,
+                        letter,
+                        {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
+                    ));
+                }
             }
         }
         else {
