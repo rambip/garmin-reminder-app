@@ -61,8 +61,7 @@ class ChoiceMenuDelegate extends WatchUi.Menu2InputDelegate {
             _partialReminder.timeScope = item.getId();
             menu = getMenu(2);
         }
-        else if (_partialReminder.letterGroup == null) {
-            _partialReminder.letterGroup = item.getId();
+        else if (_selectedGroup == null) {
             _selectedGroup = item.getId();
             menu = getMenu(3);
         }

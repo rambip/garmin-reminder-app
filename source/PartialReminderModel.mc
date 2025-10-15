@@ -3,13 +3,11 @@ import Toybox.Time;
 class PartialReminder {
     var category;
     var timeScope;
-    var letterGroup;
     var letter;
 
     function initialize() {
         category = null;
         timeScope = null;
-        letterGroup = null;
         letter = null;
     }
 
@@ -32,7 +30,7 @@ class PartialReminder {
         return saveReminders(reminders);
     }
     function isComplete() {
-        return (category != null) && (timeScope != null) && (letterGroup != null) && (letter != null);
+        return (category != null) && (timeScope != null) && (letter != null);
     }
 
     function categoryText() {
