@@ -1,6 +1,7 @@
 import Toybox.WatchUi;
 import Toybox.Graphics;
 import Toybox.Lang;
+import Toybox.Time;
 import Rez;
 
 class MinimalView extends WatchUi.GlanceView {
@@ -22,7 +23,8 @@ class MinimalView extends WatchUi.GlanceView {
     function onUpdate(dc) {
         // Get all reminders
         var allReminders = getReminders();
-        var todayKey = getTodayKey();
+        var today = Time.today();
+        var todayKey = formatDateKey(today);
 
         // Count today's reminders
         var reminderCount = 0;

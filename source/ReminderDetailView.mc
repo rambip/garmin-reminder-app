@@ -4,6 +4,7 @@ import Toybox.Lang;
 import Toybox.Application.Storage;
 import Toybox.System;
 import Toybox.Timer;
+import Toybox.Time;
 import Rez;
 using Toybox.Lang;
 
@@ -25,7 +26,8 @@ class ReminderDetailView extends WatchUi.View {
 
         // Get the reminder object
         var allReminders = getReminders();
-        var todayKey = getTodayKey();
+        var today = Time.today();
+        var todayKey = formatDateKey(today);
         var todayReminders = [];
 
         // Filter for today's reminders
@@ -166,7 +168,8 @@ function deleteReminder(reminderIndex, deletionCallback) {
 
     // Get all reminders
     var allReminders = getReminders();
-    var todayKey = getTodayKey();
+    var today = Time.today();
+    var todayKey = formatDateKey(today);
     var todayRemindersIndices = [];
 
     // Find today's reminders and their indices in the main array

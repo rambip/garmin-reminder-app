@@ -20,8 +20,6 @@ function getCategoryString(categorySymbol) {
         :family => Rez.Strings.CategoryFamily,
         :domestic => Rez.Strings.CategoryDomestic,
         :administrative => Rez.Strings.CategoryAdministrative,
-        :transport => Rez.Strings.CategoryTransport,
-        :hobbies => Rez.Strings.CategoryHobbies,
     };
 
     if (categoryStrings.hasKey(categorySymbol)) {
@@ -83,34 +81,6 @@ function formatDateKey(moment) {
     ]);
 }
 
-// Get today's date as a string key
-function getTodayKey() {
-    var today = Time.today();
-    return formatDateKey(today);
-}
-
-// Add a new reminder
-// category and timeScope should already be display strings (converted in onSelect)
-function addReminder(category, timeScope, firstLetter) {
-    var dateKey = getTodayKey();
-
-    // Create a reminder object with display string values
-    var reminder = {
-        "date" => dateKey,
-        "category" => category,
-        "timeScope" => timeScope,
-        "firstLetter" => firstLetter
-    };
-
-    // Get all existing reminders
-    var reminders = getReminders();
-
-    // Add the new reminder
-    reminders.add(reminder);
-
-    // Save the updated list of all reminders
-    return saveReminders(reminders);
-}
 
 class Main extends Application.AppBase {
     function initialize() {
@@ -124,5 +94,83 @@ class Main extends Application.AppBase {
 
     function getGlanceView() {
         return [new MinimalView()];
+    }
+}
+
+// Delegate for handling the main menu interactions
+class MainMenuDelegate extends WatchUi.Menu2InputDelegate {
+    function initialize() {
+        Menu2InputDelegate.initialize();
+        log("MainMenuDelegate initialized");
+    }
+
+    function onSelect(item) {
+        var itemId = item.getId();
+        log("MainMenuDelegate.onSelect called with item: " + itemId);
+
+        if (itemId == :add_reminder) {
+            // Start the add reminder process with the category selection menu
+            var choiceDelegate = new ChoiceMenuDelegate();
+            var firstMenu = choiceDelegate.initialMenu();
+            WatchUi.pushView(firstMenu, choiceDelegate, WatchUi.SLIDE_UP);
+
+        } else if (itemId == :see_reminders) {
+            // Show the reminders menu
+            log("Creating ReminderMenuDelegate");
+            var menuDelegate = new ReminderMenuDelegate();
+            log("About to push reminder menu view");
+            // For dynamic content, we create and populate the menu programmatically
+            // Create display format with full category name and first letter
+            var menu = new WatchUi.Menu2({:title => WatchUi.loadResource(Rez.Strings.RemindersMenuTitle)});
+
+            // Get all reminders
+            var allReminders = getReminders();
+            var today = Time.today();
+            var todayKey = formatDateKey(today);
+            var todayReminders = [];
+
+            // Filter for today's reminders
+            for (var i = 0; i < allReminders.size(); i++) {
+                var reminderDate = allReminders[i]["date"];
+                if (reminderDate.toString().equals(todayKey)) {
+                    todayReminders.add(allReminders[i]);
+                }
+            }
+
+            // Add reminders to the menu with new structure
+            if (todayReminders.size() > 0) {
+                for (var i = 0; i < todayReminders.size(); i++) {
+                    // Get reminder data - these are already display strings from storage
+                    var category = todayReminders[i]["category"];
+                    var timeScope = todayReminders[i]["timeScope"];
+                    var firstLetter = todayReminders[i]["firstLetter"];
+
+                    // Create display format with full category name and first letter
+                    menu.addItem(new WatchUi.MenuItem(
+                        Lang.format("$1$ [$2$]", [category, firstLetter]),
+                        timeScope,
+                        "reminder_" + i,  // Keep as string since we're creating this menu manually
+                        {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
+                    ));
+                }
+            } else {
+                menu.addItem(new WatchUi.MenuItem(
+                    WatchUi.loadResource(Rez.Strings.NoRemindersLabel),
+                    WatchUi.loadResource(Rez.Strings.NoRemindersSubLabel),
+                    "no_reminders",  // Keep as string since we're creating this menu manually
+                    {:alignment => WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}
+                ));
+            }
+
+            WatchUi.pushView(menu, menuDelegate, WatchUi.SLIDE_UP);
+            log("Reminder menu view pushed");
+        }
+    }
+
+    function onBack() {
+        log("MainMenuDelegate.onBack called - exiting app");
+        // Exit the app
+        WatchUi.popView(WatchUi.SLIDE_DOWN);
+        System.exit();
     }
 }
