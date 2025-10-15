@@ -28,12 +28,6 @@ class GenericMenu2Delegate extends WatchUi.Menu2InputDelegate {
     }
 }
 
-class ChoiceMenuView {
-    function onLayout() {
-
-    }
-}
-
 // A delegate for multi-step menu selection, using explicit step variables and switch logic.
 class ChoiceMenuDelegate extends WatchUi.Menu2InputDelegate {
     hidden var _step;
