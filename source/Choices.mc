@@ -87,6 +87,30 @@ class ChoiceMenuDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     function onBack() {
+        var menu;
+        if (_selectedGroup2 != null) {
+            _partialReminder.setLetter2(null);
+            _selectedGroup2 = null;
+            menu = getMenu(4);
+        }
+        else if (_selectedGroup1 != null) {
+            _partialReminder.setLetter1(null);
+            _selectedGroup1 = null;
+            menu = getMenu(2);
+        }
+        else if (_partialReminder.hasTimeScope()) {
+            _partialReminder.setTimeScope(null);
+            menu = getMenu(1);
+        }
+        else if (_partialReminder.hasCategory()) {
+            _partialReminder.setCategory(null);
+            menu = getMenu(0);
+        }
+        else {
+            WatchUi.popView(WatchUi.SLIDE_UP);
+            log("reminder is empty, exiting creation menu");
+        }
+        WatchUi.switchToView(menu, self, WatchUi.SLIDE_UP);
     }
 
     function initialMenu() {
