@@ -20,6 +20,7 @@ function getCategoryString(categorySymbol) {
         :family => Rez.Strings.CategoryFamily,
         :domestic => Rez.Strings.CategoryDomestic,
         :administrative => Rez.Strings.CategoryAdministrative,
+        :hobbies => Rez.Strings.CategoryHobbies,
     };
 
     if (categoryStrings.hasKey(categorySymbol)) {
