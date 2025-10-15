@@ -109,6 +109,7 @@ class ChoiceMenuDelegate extends WatchUi.Menu2InputDelegate {
         else {
             WatchUi.popView(WatchUi.SLIDE_UP);
             log("reminder is empty, exiting creation menu");
+            return;
         }
         WatchUi.switchToView(menu, self, WatchUi.SLIDE_UP);
     }
