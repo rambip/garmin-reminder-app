@@ -32,7 +32,8 @@ class ReminderAddedView extends WatchUi.View {
 
         // Set the dynamic text content (_category and _timeScope are already strings)
         if (_categoryLabel != null) {
-            _categoryLabel.setText(_partialReminder.categoryText() + " [" + _partialReminder.letterText() + "]");
+            var letterText = _partialReminder.letterText();
+            _categoryLabel.setText(_partialReminder.categoryText() + " [" + letterText + "]");
         }
         if (_timeScopeLabel != null) {
             _timeScopeLabel.setText(_partialReminder.timeScopeText());

@@ -143,7 +143,7 @@ class MainMenuDelegate extends WatchUi.Menu2InputDelegate {
                     // Get reminder data - these are already display strings from storage
                     var category = todayReminders[i]["category"];
                     var timeScope = todayReminders[i]["timeScope"];
-                    var firstLetter = todayReminders[i]["firstLetter"];
+                    var firstLetter = todayReminders[i]["letters"];
 
                     // Create display format with full category name and first letter
                     menu.addItem(new WatchUi.MenuItem(

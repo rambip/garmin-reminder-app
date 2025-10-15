@@ -64,10 +64,10 @@ class ReminderDetailView extends WatchUi.View {
         // Set the dynamic text content if we have valid labels
         if (_categoryLabel != null && _reminder != null) {
             var category = _reminder["category"];
-            var firstLetter = _reminder["firstLetter"];
+            var letters = _reminder["letters"];
 
             // category is already a display string from storage
-            _categoryLabel.setText(Lang.format("$1$ [$2$]", [category, firstLetter]));
+            _categoryLabel.setText(Lang.format("$1$ [$2$]", [category, letters]));
         }
 
         if (_timeScopeLabel != null && _reminder != null) {
