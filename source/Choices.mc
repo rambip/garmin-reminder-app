@@ -32,7 +32,6 @@ class GenericMenu2Delegate extends WatchUi.Menu2InputDelegate {
 class ChoiceMenuDelegate extends WatchUi.Menu2InputDelegate {
     hidden var _step;
     hidden var _partialReminder;
-    hidden var _selectedGroup;
     hidden var _selectedGroup1;
     hidden var _selectedGroup2;
 
